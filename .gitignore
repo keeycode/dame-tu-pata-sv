@@ -21,6 +21,10 @@ pnpm-debug.log*
 # internal project documentation
 docs/
 
+# runner scripts
+run-dev.mjs
+
+
 # macOS-specific files
 .DS_Store
 Thumbs.db
