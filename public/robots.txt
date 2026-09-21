@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dametupatasv.keeycode.com/sitemap-index.xml

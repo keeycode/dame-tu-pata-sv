@@ -1,0 +1,84 @@
+---
+// Hero.astro - Sección Principal y Llamado a la Acción
+---
+
+<section
+  id="inicio"
+  class="w-full py-10 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl"
+  style="background-image: radial-gradient(circle at 15% 20%, rgba(246, 199, 183, 0.28) 0%, transparent 45%), radial-gradient(circle at 85% 60%, rgba(246, 166, 35, 0.12) 0%, transparent 40%), url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%236E1F1C\' fill-opacity=\'0.035\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'30\' cy=\'30\' r=\'2\'/%3E%3Ccircle cx=\'26\' cy=\'24\' r=\'1\'/%3E%3Ccircle cx=\'34\' cy=\'24\' r=\'1\'/%3E%3Ccircle cx=\'23\' cy=\'27\' r=\'0.9\'/%3E%3Ccircle cx=\'37\' cy=\'27\' r=\'0.9\'/%3E%3C/g%3E%3C/svg%3E');"
+>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+    <!-- Columna Izquierda: Mensaje y Acciones -->
+    <div class="lg:col-span-6 flex flex-col items-start gap-5">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm tracking-wide border border-neutral-border/30">
+        <span class="material-symbols-outlined text-[16px]">pets</span>
+        <span>Rescate y Adopción Responsable en El Salvador</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold text-primary-dark tracking-tight leading-[1.15]">
+        Una pata puede <span class="text-primary-cta underline decoration-accent-warm underline-offset-8">cambiar</span> una vida.
+      </h1>
+
+      <p class="text-base sm:text-lg text-text-main/80 max-w-xl leading-relaxed">
+        Dame Tu Pata promueve el rescate y la adopción de perros en El Salvador. Juntos podemos brindar apoyo a perritos rescatados y acompañarlos en su camino hacia un hogar lleno de cariño y protección.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
+        <a
+          href="#donaciones"
+          class="inline-flex items-center justify-center gap-2 bg-primary-cta text-white font-bold text-[15px] px-7 py-3.5 rounded-full hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_18px_rgba(240,75,69,0.3)] hover:shadow-xl w-full sm:w-auto"
+        >
+          <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
+          <span>Donar ahora</span>
+        </a>
+        <a
+          href="#centros-acopio"
+          class="inline-flex items-center justify-center gap-2 bg-card-bg text-primary-dark border border-neutral-border/60 font-bold text-[15px] px-6 py-3.5 rounded-full hover:bg-soft-chip/40 transition-all duration-200 w-full sm:w-auto shadow-sm"
+        >
+          <span class="material-symbols-outlined text-[20px] text-accent-warm">location_on</span>
+          <span>Ver centros de acopio</span>
+        </a>
+      </div>
+
+      <!-- Microindicador de comunidad -->
+      <div class="pt-3 flex items-center gap-3">
+        <div class="flex -space-x-2 overflow-hidden">
+          <div class="inline-flex h-8 w-8 rounded-full bg-soft-chip items-center justify-center text-primary-dark text-xs font-extrabold border-2 border-page-bg">SV</div>
+          <div class="inline-flex h-8 w-8 rounded-full bg-accent-warm/30 items-center justify-center text-primary-dark text-xs border-2 border-page-bg">🐾</div>
+          <div class="inline-flex h-8 w-8 rounded-full bg-card-bg items-center justify-center text-primary-cta text-xs border-2 border-page-bg shadow-sm">
+            <span class="material-symbols-outlined text-[16px]">favorite</span>
+          </div>
+        </div>
+        <p class="text-xs sm:text-sm text-text-main/70 font-medium">
+          Uniendo corazones por el bienestar y cuidado canino.
+        </p>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Imagen Hero Oficial -->
+    <div class="lg:col-span-6 relative">
+      <div class="relative rounded-3xl overflow-hidden shadow-xl bg-card-bg border border-neutral-border/40 aspect-[4/3] md:aspect-[5/4] w-full">
+        <img
+          src="/assets/images/hero-perrito-rescatado.jpg"
+          alt="Voluntaria en El Salvador sosteniendo con ternura la patita de un perrito mestizo rescatado"
+          width="800"
+          height="640"
+          loading="eager"
+          class="w-full h-full object-cover"
+        />
+        <!-- Floating Badge -->
+        <div class="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-neutral-border/30 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-soft-chip flex items-center justify-center text-primary-dark">
+            <span class="material-symbols-outlined text-[20px]">favorite</span>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-primary-dark leading-tight">Adopciones con amor ✨</p>
+            <p class="text-[11px] text-text-main/70 leading-none">Cada rescate cuenta una historia</p>
+          </div>
+        </div>
+      </div>
+      <!-- Glow sutil -->
+      <div class="absolute -top-4 -right-4 w-32 h-32 bg-accent-warm/20 rounded-full blur-2xl -z-10"></div>
+    </div>
+  </div>
+</section>

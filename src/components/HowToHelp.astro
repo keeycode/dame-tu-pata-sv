@@ -1,0 +1,75 @@
+---
+// HowToHelp.astro - Sección Cómo Ayudar / Formas de Apoyo
+---
+
+<section
+  id="como-ayudar"
+  class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl"
+  style="background-image: radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.7) 0%, transparent 60%), url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'20\' cy=\'20\' r=\'1\' fill=\'%23C8BBAA\' fill-opacity=\'0.16\'/%3E%3C/svg%3E');"
+>
+  <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-8">
+    <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-soft-chip text-primary-dark font-bold text-xs mb-2 border border-neutral-border/30">
+      <span class="material-symbols-outlined text-[15px]">handshake</span>
+      <span>Acciones solidarias</span>
+    </div>
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-dark tracking-tight">
+      Hay muchas formas de dar una pata
+    </h2>
+    <p class="text-base text-text-main/80 mt-2">
+      Cada muestra de apoyo suma para brindar una segunda oportunidad a perritos rescatados.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- 1. Donación Monetaria -->
+    <div class="bg-card-bg rounded-3xl p-7 shadow-sm border border-neutral-border/30 hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
+      <div>
+        <div class="w-14 h-14 rounded-2xl bg-soft-chip flex items-center justify-center text-primary-cta mb-5">
+          <span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+        </div>
+        <h3 class="text-xl font-bold text-primary-dark mb-2">Donación monetaria</h3>
+        <p class="text-sm text-text-main/75 mb-6 leading-relaxed">
+          Tu aporte económico voluntario contribuye al cuidado, alimentación y atenciones médicas que requieren los perritos rescatados.
+        </p>
+      </div>
+      <a href="#donaciones" class="inline-flex items-center gap-1.5 text-primary-cta font-bold text-sm hover:text-primary-dark transition-colors group">
+        <span>Ver cuentas de donación</span>
+        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </a>
+    </div>
+
+    <!-- 2. Donación en Especie -->
+    <div class="bg-card-bg rounded-3xl p-7 shadow-sm border border-neutral-border/30 hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
+      <div>
+        <div class="w-14 h-14 rounded-2xl bg-soft-chip flex items-center justify-center text-primary-cta mb-5">
+          <span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+        </div>
+        <h3 class="text-xl font-bold text-primary-dark mb-2">Donación en especie</h3>
+        <p class="text-sm text-text-main/75 mb-6 leading-relaxed">
+          Puedes colaborar con alimento para cachorros y adultos, artículos de higiene, cobijas y suministros para su bienestar cotidiano.
+        </p>
+      </div>
+      <a href="#donaciones-especie" class="inline-flex items-center gap-1.5 text-primary-cta font-bold text-sm hover:text-primary-dark transition-colors group">
+        <span>Ver lista de insumos</span>
+        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </a>
+    </div>
+
+    <!-- 3. Centros de Acopio -->
+    <div class="bg-card-bg rounded-3xl p-7 shadow-sm border border-neutral-border/30 hover:shadow-lg transition-all duration-200 flex flex-col justify-between">
+      <div>
+        <div class="w-14 h-14 rounded-2xl bg-soft-chip flex items-center justify-center text-primary-cta mb-5">
+          <span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">storefront</span>
+        </div>
+        <h3 class="text-xl font-bold text-primary-dark mb-2">Centros de acopio</h3>
+        <p class="text-sm text-text-main/75 mb-6 leading-relaxed">
+          Entrega tus donaciones físicas en los establecimientos aliados en San Salvador, Santa Tecla y Antiguo Cuscatlán.
+        </p>
+      </div>
+      <a href="#centros-acopio" class="inline-flex items-center gap-1.5 text-primary-cta font-bold text-sm hover:text-primary-dark transition-colors group">
+        <span>Ubicar centros de acopio</span>
+        <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+      </a>
+    </div>
+  </div>
+</section>

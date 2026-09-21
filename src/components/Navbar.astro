@@ -1,0 +1,106 @@
+---
+// Navbar.astro - Header Sticky y Navegación Responsive
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-[#F2EDE3]/95 backdrop-blur-md border-b border-neutral-border/40 transition-all duration-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+    <!-- LOGO OFICIAL -->
+    <a
+      href="#inicio"
+      class="flex items-center shrink-0 focus:outline-none focus:ring-2 focus:ring-primary-cta rounded-full"
+      aria-label="Dame Tu Pata - Inicio"
+    >
+      <img
+        src="/assets/images/logo-dametupata.png"
+        alt="Dame Tu Pata"
+        width="64"
+        height="64"
+        class="h-14 sm:h-16 w-auto aspect-square object-contain transition-transform duration-200 hover:scale-105 rounded-full"
+      />
+    </a>
+
+    <!-- DESKTOP NAVIGATION -->
+    <nav class="hidden lg:flex items-center gap-6 lg:gap-8 font-semibold text-[15px] text-text-main/80" aria-label="Navegación principal">
+      <a href="#inicio" class="hover:text-primary-dark text-primary-dark transition-colors duration-200">Inicio</a>
+      <a href="#quienes-somos" class="hover:text-primary-dark transition-colors duration-200">Quiénes somos</a>
+      <a href="#como-ayudar" class="hover:text-primary-dark transition-colors duration-200">Cómo ayudar</a>
+      <a href="#donaciones" class="hover:text-primary-dark transition-colors duration-200">Donar</a>
+      <a href="#centros-acopio" class="hover:text-primary-dark transition-colors duration-200">Centros de acopio</a>
+      <a href="#contacto" class="hover:text-primary-dark transition-colors duration-200">Contacto</a>
+    </nav>
+
+    <!-- CTA & MOBILE BURGER -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Botón Donar Ahora: Visible siempre por fuera en móvil, tablet y desktop -->
+      <a
+        href="#donaciones"
+        class="inline-flex items-center justify-center bg-primary-cta text-white font-bold text-xs sm:text-sm px-4 py-2 sm:px-6 sm:py-2.5 rounded-full hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_16px_rgba(240,75,69,0.25)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+      >
+        Donar ahora
+      </a>
+
+      <!-- Botón Hamburguesa Móvil/Tablet -->
+      <button
+        type="button"
+        id="mobile-menu-btn"
+        class="lg:hidden inline-flex items-center justify-center p-2 sm:p-2.5 rounded-xl text-primary-dark bg-white border border-neutral-border/50 hover:bg-soft-chip/40 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-cta"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="material-symbols-outlined text-[24px] sm:text-[26px]" id="burger-icon">menu</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU DESPLEGABLE INTERACTIVO -->
+  <div
+    id="mobile-menu"
+    class="hidden lg:hidden bg-[#F2EDE3] border-b border-neutral-border/50 px-4 pt-3 pb-6 space-y-3 shadow-xl"
+  >
+    <div class="flex flex-col space-y-2 text-[15px] font-semibold text-text-main">
+      <a href="#inicio" class="mobile-nav-link px-3 py-2 rounded-lg text-primary-dark bg-soft-chip/40 transition-colors">Inicio</a>
+      <a href="#quienes-somos" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white transition-colors">Quiénes somos</a>
+      <a href="#como-ayudar" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white transition-colors">Cómo ayudar</a>
+      <a href="#donaciones" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white transition-colors">Donar</a>
+      <a href="#centros-acopio" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white transition-colors">Centros de acopio</a>
+      <a href="#contacto" class="mobile-nav-link px-3 py-2 rounded-lg hover:bg-white transition-colors">Contacto</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  function initMobileMenu() {
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const burgerIcon = document.getElementById('burger-icon');
+
+    if (mobileBtn && mobileMenu && burgerIcon) {
+      mobileBtn.addEventListener('click', () => {
+        const isHidden = mobileMenu.classList.contains('hidden');
+        if (isHidden) {
+          mobileMenu.classList.remove('hidden');
+          mobileBtn.setAttribute('aria-expanded', 'true');
+          burgerIcon.textContent = 'close';
+        } else {
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded', 'false');
+          burgerIcon.textContent = 'menu';
+        }
+      });
+
+      const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+      mobileNavLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded', 'false');
+          burgerIcon.textContent = 'menu';
+        });
+      });
+    }
+  }
+
+  // Ejecutar tanto en carga inicial como en navegación Astro
+  initMobileMenu();
+  document.addEventListener('astro:after-swap', initMobileMenu);
+</script>
