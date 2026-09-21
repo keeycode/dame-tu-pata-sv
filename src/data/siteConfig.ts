@@ -17,7 +17,6 @@ export interface SiteConfig {
   contactEmail: string;
   socials: {
     instagram: SocialLink;
-    facebook: SocialLink;
     tiktok: SocialLink;
   };
 }
@@ -36,12 +35,6 @@ export const siteConfig: SiteConfig = {
       username: '@dametupatasv',
       url: 'https://www.instagram.com/dametupatasv/',
       active: true,
-    },
-    facebook: {
-      label: 'Facebook',
-      username: 'Dame tu pata - El Salvador',
-      url: '', // Campo preparado para completar cuando se confirme la URL oficial
-      active: false,
     },
     tiktok: {
       label: 'TikTok',
