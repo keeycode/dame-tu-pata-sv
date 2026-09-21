@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import 'leaflet/dist/leaflet.css';
+import { siteConfig } from '../data/siteConfig';
 
 interface Props {
   title?: string;
@@ -37,6 +38,11 @@ const jsonLd = {
         '@type': 'Country',
         name: 'El Salvador',
       },
+      sameAs: [
+        siteConfig.socials.instagram.url,
+        siteConfig.socials.tiktok.url,
+        siteConfig.socials.facebook.url,
+      ].filter(Boolean),
     },
     {
       '@type': 'WebSite',
