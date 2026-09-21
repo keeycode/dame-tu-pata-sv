@@ -95,10 +95,46 @@ const jsonLd = {
       rel="stylesheet"
     />
 
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
     <!-- Structured Data JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body class="bg-page-bg text-text-main font-sans antialiased selection:bg-soft-chip selection:text-primary-dark min-h-screen">
     <slot />
+
+    <!-- Script de Animaciones de Entrada (IntersectionObserver) -->
+    <script>
+      function setupScrollReveals() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        if (prefersReducedMotion) {
+          revealElements.forEach((el) => el.classList.add('is-revealed'));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-revealed');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.12,
+            rootMargin: '0px 0px -40px 0px',
+          }
+        );
+
+        revealElements.forEach((el) => observer.observe(el));
+      }
+
+      setupScrollReveals();
+      document.addEventListener('astro:after-swap', setupScrollReveals);
+    </script>
   </body>
 </html>

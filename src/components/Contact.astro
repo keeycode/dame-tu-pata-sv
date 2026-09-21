@@ -1,8 +1,11 @@
 ---
-// Contact.astro - Canales Directos y Formulario de Contacto
+// Contact.astro - Canales Directos y Formulario de Contacto vía WhatsApp
+import { siteConfig } from '../data/siteConfig';
+
+const whatsappNumber = siteConfig.whatsappNumber;
 ---
 
-<section id="contacto" class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24">
+<section id="contacto" class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24 reveal-on-scroll">
   <div
     class="bg-white rounded-3xl p-6 sm:p-10 md:p-12 border border-neutral-border/40 shadow-sm"
     style="background-image: radial-gradient(circle at 10% 15%, rgba(240, 75, 69, 0.04) 0%, transparent 40%), radial-gradient(circle at 90% 85%, rgba(110, 31, 28, 0.035) 0%, transparent 40%), url('data:image/svg+xml,%3Csvg width=\'32\' height=\'32\' viewBox=\'0 0 32 32\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Ccircle cx=\'16\' cy=\'16\' r=\'0.75\' fill=\'%23C8BBAA\' fill-opacity=\'0.12\'/%3E%3C/svg%3E'); box-shadow: 0 10px 35px -5px rgba(110, 31, 28, 0.06);"
@@ -23,12 +26,12 @@
           </p>
         </div>
 
-        <div class="space-y-3">
+        <div class="space-y-3.5">
           <!-- Instagram -->
-          <div class="bg-[#F2EDE3]/70 rounded-2xl p-4 border border-neutral-border/30 flex items-center justify-between hover:bg-[#F2EDE3] transition-colors">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shadow-sm">
-                <span class="material-symbols-outlined text-[22px]">photo_camera</span>
+          <div class="bg-[#F2EDE3]/70 rounded-2xl p-5 border border-neutral-border/30 flex items-center justify-between hover:bg-[#F2EDE3] transition-colors">
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shadow-sm">
+                <span class="material-symbols-outlined text-[24px]">photo_camera</span>
               </div>
               <div>
                 <p class="text-sm font-bold text-primary-dark">Instagram</p>
@@ -38,25 +41,32 @@
             <span class="px-3 py-1 rounded-full bg-white text-text-main/70 text-xs font-semibold border border-neutral-border/30">Pronto</span>
           </div>
 
-          <!-- WhatsApp -->
-          <div class="bg-[#F2EDE3]/70 rounded-2xl p-4 border border-neutral-border/30 flex items-center justify-between hover:bg-[#F2EDE3] transition-colors">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shadow-sm">
-                <span class="material-symbols-outlined text-[22px]">chat</span>
+          <!-- WhatsApp Directo -->
+          <div class="bg-[#F2EDE3]/70 rounded-2xl p-5 border border-neutral-border/30 flex items-center justify-between hover:bg-[#F2EDE3] transition-colors">
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shadow-sm">
+                <span class="material-symbols-outlined text-[24px]">chat</span>
               </div>
               <div>
                 <p class="text-sm font-bold text-primary-dark">WhatsApp Directo</p>
-                <p class="text-xs text-text-main/60">Número oficial por confirmar</p>
+                <p class="text-xs text-text-main/60">Atención personalizada</p>
               </div>
             </div>
-            <span class="px-3 py-1 rounded-full bg-white text-text-main/70 text-xs font-semibold border border-neutral-border/30">Pronto</span>
+            <a
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-3 py-1 rounded-full bg-primary-cta text-white text-xs font-bold hover:bg-primary-dark transition-colors shadow-xs"
+            >
+              Chatear
+            </a>
           </div>
 
           <!-- Correo -->
-          <div class="bg-[#F2EDE3]/70 rounded-2xl p-4 border border-neutral-border/30 flex items-center justify-between hover:bg-[#F2EDE3] transition-colors">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shadow-sm">
-                <span class="material-symbols-outlined text-[22px]">mail</span>
+          <div class="bg-[#F2EDE3]/70 rounded-2xl p-5 border border-neutral-border/30 flex items-center justify-between hover:bg-[#F2EDE3] transition-colors">
+            <div class="flex items-center gap-3.5">
+              <div class="w-11 h-11 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shadow-sm">
+                <span class="material-symbols-outlined text-[24px]">mail</span>
               </div>
               <div>
                 <p class="text-sm font-bold text-primary-dark">Correo Electrónico</p>
@@ -68,78 +78,95 @@
         </div>
       </div>
 
-      <!-- Columna Derecha: Formulario Preparado para Integración -->
-      <div class="lg:col-span-7 bg-[#F2EDE3]/50 rounded-2xl p-6 sm:p-8 border border-neutral-border/40">
-        <h3 class="text-xl sm:text-2xl font-bold text-primary-dark mb-1">Envíanos un mensaje</h3>
-        <p class="text-xs sm:text-sm text-text-main/70 mb-5">
-          Completa el siguiente formulario para dudas sobre adopciones, voluntariado o centros de acopio.
+      <!-- Columna Derecha: Formulario con Envío Directo a WhatsApp -->
+      <div class="lg:col-span-7 bg-[#F2EDE3]/50 rounded-2xl p-6 sm:p-8 md:p-10 border border-neutral-border/40">
+        <h3 class="text-xl sm:text-2xl font-bold text-primary-dark mb-1.5">Envíanos un mensaje</h3>
+        <p class="text-xs sm:text-sm text-text-main/70 mb-6">
+          Completa el formulario y te abrirá un mensaje directo en WhatsApp con todos tus datos organizados.
         </p>
 
-        <form id="contact-form" class="space-y-4" action="#" method="POST">
+        <form id="contact-form" class="space-y-4" data-whatsapp={whatsappNumber}>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label for="contact-name" class="text-xs font-bold text-text-main">Nombre completo</label>
+            <!-- Nombre -->
+            <div class="space-y-1.5">
+              <label for="contact-name" class="text-xs font-bold text-text-main">Nombre completo *</label>
               <input
                 type="text"
                 id="contact-name"
                 name="name"
                 required
                 placeholder="Tu nombre"
-                class="w-full bg-white border border-neutral-border/40 px-4 py-2.5 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta"
+                class="w-full bg-white border border-neutral-border/40 px-4 py-3 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta shadow-xs"
               />
             </div>
-            <div class="space-y-1">
-              <label for="contact-phone" class="text-xs font-bold text-text-main">Teléfono / WhatsApp</label>
+
+            <!-- Correo -->
+            <div class="space-y-1.5">
+              <label for="contact-email" class="text-xs font-bold text-text-main">Correo electrónico *</label>
+              <input
+                type="email"
+                id="contact-email"
+                name="email"
+                required
+                placeholder="tu@correo.com"
+                class="w-full bg-white border border-neutral-border/40 px-4 py-3 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta shadow-xs"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Teléfono -->
+            <div class="space-y-1.5">
+              <label for="contact-phone" class="text-xs font-bold text-text-main">Teléfono / WhatsApp *</label>
               <input
                 type="tel"
                 id="contact-phone"
                 name="phone"
                 required
                 placeholder="+503 0000 0000"
-                class="w-full bg-white border border-neutral-border/40 px-4 py-2.5 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta"
+                class="w-full bg-white border border-neutral-border/40 px-4 py-3 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta shadow-xs"
               />
+            </div>
+
+            <!-- Asunto / Motivo -->
+            <div class="space-y-1.5">
+              <label for="contact-subject" class="text-xs font-bold text-text-main">Asunto / Motivo *</label>
+              <select
+                id="contact-subject"
+                name="subject"
+                required
+                class="w-full bg-white border border-neutral-border/40 px-4 py-3 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta shadow-xs"
+              >
+                <option value="">Selecciona un motivo</option>
+                <option value="Adopción de un perrito">Quiero postularme para adoptar un perro</option>
+                <option value="Ofrecer Hogar Temporal">Quiero brindar hogar temporal</option>
+                <option value="Donación en especie o alimentos">Quiero donar insumos o alimento</option>
+                <option value="Unirme como Voluntario">Quiero unirme como voluntario</option>
+                <option value="Otras consultas generales">Otras consultas generales</option>
+              </select>
             </div>
           </div>
 
-          <div class="space-y-1">
-            <label for="contact-interest" class="text-xs font-bold text-text-main">Motivo de contacto</label>
-            <select
-              id="contact-interest"
-              name="interest"
-              class="w-full bg-white border border-neutral-border/40 px-4 py-2.5 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta"
-            >
-              <option value="adopcion">Quiero postularme para adoptar un perro</option>
-              <option value="hogar-temporal">Quiero brindar hogar temporal</option>
-              <option value="donacion-especie">Quiero donar insumos o alimento</option>
-              <option value="voluntariado">Quiero unirme como voluntario</option>
-              <option value="otro">Otras consultas</option>
-            </select>
-          </div>
-
-          <div class="space-y-1">
-            <label for="contact-message" class="text-xs font-bold text-text-main">Mensaje</label>
+          <!-- Mensaje -->
+          <div class="space-y-1.5">
+            <label for="contact-message" class="text-xs font-bold text-text-main">Mensaje *</label>
             <textarea
               id="contact-message"
               name="message"
               rows="4"
               required
-              placeholder="Escribe aquí tu consulta..."
-              class="w-full bg-white border border-neutral-border/40 px-4 py-2.5 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta resize-none"
+              placeholder="Escribe aquí tu consulta o propuesta..."
+              class="w-full bg-white border border-neutral-border/40 px-4 py-3 rounded-xl text-sm text-text-main focus:outline-none focus:ring-2 focus:ring-primary-cta resize-none shadow-xs"
             ></textarea>
           </div>
 
-          <!-- Nota de integración pendiente (sin fingir envío falso en producción) -->
-          <div class="p-3 bg-white/80 border border-neutral-border/40 rounded-xl text-xs text-text-main/75 flex items-center gap-2">
-            <span class="material-symbols-outlined text-accent-warm text-[18px] shrink-0">info</span>
-            <span>El canal de recepción directa por correo / backend se activará en la siguiente fase de integración.</span>
-          </div>
-
+          <!-- Botón de Envío vía WhatsApp -->
           <button
             type="submit"
-            class="w-full py-3.5 px-6 rounded-full bg-primary-cta text-white font-bold text-sm hover:bg-primary-dark transition-all duration-200 shadow-md flex items-center justify-center gap-2"
+            class="w-full py-4 px-6 rounded-full bg-primary-cta text-white font-bold text-sm hover:bg-primary-dark transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 mt-2"
           >
-            <span class="material-symbols-outlined text-[20px]">send</span>
-            <span>Enviar mensaje</span>
+            <span class="material-symbols-outlined text-[20px]">chat</span>
+            <span>Enviar mensaje por WhatsApp</span>
           </button>
         </form>
       </div>
@@ -148,17 +175,61 @@
 </section>
 
 <script>
-  function initContactForm() {
+  function initWhatsAppForm() {
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        // En esta fase evitamos simular envíos falsos no respaldados por backend
-        e.preventDefault();
-        alert('Formulario listo. La conexión con el backend de mensajería será integrada en la siguiente etapa.');
-      });
-    }
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Validación nativa de campos obligatorios
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const nameInput = document.getElementById('contact-name') as HTMLInputElement | null;
+      const emailInput = document.getElementById('contact-email') as HTMLInputElement | null;
+      const phoneInput = document.getElementById('contact-phone') as HTMLInputElement | null;
+      const subjectSelect = document.getElementById('contact-subject') as HTMLSelectElement | null;
+      const messageInput = document.getElementById('contact-message') as HTMLTextAreaElement | null;
+
+      const name = nameInput?.value.trim() || '';
+      const email = emailInput?.value.trim() || '';
+      const phone = phoneInput?.value.trim() || '';
+      const subject = subjectSelect?.value.trim() || '';
+      const message = messageInput?.value.trim() || '';
+
+      // Validación estricta antes de abrir enlace
+      if (!name || !email || !phone || !subject || !message) {
+        form.reportValidity();
+        return;
+      }
+
+      const whatsappNumber = form.getAttribute('data-whatsapp') || '50378449676';
+
+      // Estructura exacta solicitada
+      const structuredText =
+`Hola, quiero ponerme en contacto con Dame Tu Pata.
+
+Nombre: ${name}
+Correo: ${email}
+Teléfono: ${phone}
+Asunto: ${subject}
+
+Mensaje: ${message}`;
+
+      const encodedText = encodeURIComponent(structuredText);
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedText}`;
+
+      // Apertura segura de WhatsApp en nueva pestaña
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+
+      // Limpieza del formulario
+      form.reset();
+    });
   }
 
-  initContactForm();
-  document.addEventListener('astro:after-swap', initContactForm);
+  initWhatsAppForm();
+  document.addEventListener('astro:after-swap', initWhatsAppForm);
 </script>
