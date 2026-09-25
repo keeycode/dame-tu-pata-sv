@@ -10,10 +10,21 @@ const availableDogs = adoptionDogs
 
 const whatsappNumber = siteConfig.whatsappNumber;
 
-// Generador de enlace a WhatsApp con mensaje personalizado y codificado
-function getWhatsAppAdoptionUrl(dogName: string): string {
-  const message = `Hola, estoy interesado/a en adoptar a ${dogName}.\n\n¿Podrían brindarme más información sobre él/ella y sobre el proceso de adopción?`;
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+// Generador de enlace a WhatsApp con mensaje personalizado incluyendo toda la información del perrito
+function getWhatsAppAdoptionUrl(dog: AdoptionDog): string {
+  const lines = [
+    `Hola, estoy interesado/a en adoptar a ${dog.name}.`,
+    '',
+    'Ficha del perrito:',
+    dog.sex ? `- Sexo: ${dog.sex}` : null,
+    dog.age ? `- Edad: ${dog.age}` : null,
+    dog.size ? `- Tamaño: ${dog.size}` : null,
+    dog.description ? `- Historia y detalles: ${dog.description}` : null,
+    '',
+    '¿Podrían brindarme más información sobre él/ella y sobre el proceso de adopción?'
+  ].filter((line): line is string => line !== null).join('\n');
+
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lines)}`;
 }
 ---
 
@@ -49,7 +60,7 @@ function getWhatsAppAdoptionUrl(dogName: string): string {
     availableDogs.length > 0 ? (
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
         {availableDogs.map((dog, index) => {
-          const whatsappUrl = getWhatsAppAdoptionUrl(dog.name);
+          const whatsappUrl = getWhatsAppAdoptionUrl(dog);
           const staggerClass = `stagger-${(index % 6) + 1}`;
 
           return (
