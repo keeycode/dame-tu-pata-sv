@@ -22,7 +22,7 @@
     font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   main > :first-child {
     margin-top: 0 !important;
@@ -45,26 +45,47 @@
    Animaciones de Entrada Ligeras (CSS + IntersectionObserver)
    ========================================================================== */
 
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 550ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 550ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+/* En dispositivos móviles (< 768px): Las animaciones activadas por scroll se desactivan
+   completamente para garantizar 100% fluidez y scroll nativo sin jank */
+@media (max-width: 767px) {
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+  .stagger-1,
+  .stagger-2,
+  .stagger-3,
+  .stagger-4,
+  .stagger-5,
+  .stagger-6 {
+    transition-delay: 0ms !important;
+  }
 }
 
-.reveal-on-scroll.is-revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* En tablets y desktop (>= 768px): Animaciones One-Shot fluidas */
+@media (min-width: 768px) {
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 450ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 450ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-/* Stagger progresivo para elementos en cuadrículas */
-.stagger-1 { transition-delay: 60ms; }
-.stagger-2 { transition-delay: 130ms; }
-.stagger-3 { transition-delay: 200ms; }
-.stagger-4 { transition-delay: 270ms; }
-.stagger-5 { transition-delay: 340ms; }
-.stagger-6 { transition-delay: 410ms; }
+  .reveal-on-scroll.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Stagger progresivo para elementos en cuadrículas */
+  .stagger-1 { transition-delay: 50ms; }
+  .stagger-2 { transition-delay: 110ms; }
+  .stagger-3 { transition-delay: 170ms; }
+  .stagger-4 { transition-delay: 230ms; }
+  .stagger-5 { transition-delay: 290ms; }
+  .stagger-6 { transition-delay: 350ms; }
+}
 
 /* Animación inicial suave en Hero */
 @keyframes heroEntrance {

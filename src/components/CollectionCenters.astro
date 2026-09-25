@@ -142,6 +142,9 @@ const activeCenters = collectionCenters
           <p class="text-xs sm:text-sm text-text-main/70">
             Haz clic en los marcadores para ver detalles y abrir tu ruta en Google Maps o Waze.
           </p>
+          <p class="text-[11px] text-primary-dark/70 font-medium mt-1 md:hidden">
+            📱 Toca cualquier marcador o pulsa "Ubicar en el mapa interactivo" en las tarjetas para explorar cada sede.
+          </p>
         </div>
       </div>
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-soft-chip/60 text-primary-dark text-xs font-bold self-start sm:self-auto border border-neutral-border/30">
@@ -150,10 +153,10 @@ const activeCenters = collectionCenters
       </div>
     </div>
 
-    <!-- Contenedor del Mapa -->
+    <!-- Contenedor del Mapa (touch-pan-y asegura desplazamiento vertical nativo en móvil) -->
     <div
       id="leaflet-map"
-      class="w-full h-[380px] sm:h-[440px] md:h-[500px] rounded-2xl border border-neutral-border/40 shadow-inner z-10 overflow-hidden"
+      class="w-full h-[380px] sm:h-[440px] md:h-[500px] rounded-2xl border border-neutral-border/40 shadow-inner z-10 overflow-hidden touch-pan-y"
     >
     </div>
   </div>
@@ -176,9 +179,16 @@ const activeCenters = collectionCenters
       .filter((c) => c.activo)
       .sort((a, b) => a.orden - b.orden);
 
+    // En pantallas táctiles móviles (< 768px), desactivar dragging y touchZoom para que
+    // un gesto táctil vertical continúe haciendo scroll en la página fluidamente
+    const isMobile = window.innerWidth < 768;
+
     // Inicializar mapa centrado en el área metropolitana de San Salvador / Santa Tecla
     const map = L.map('leaflet-map', {
       scrollWheelZoom: false,
+      dragging: !isMobile,
+      touchZoom: !isMobile,
+      tapHold: false,
     }).setView([13.692, -89.245], 13);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

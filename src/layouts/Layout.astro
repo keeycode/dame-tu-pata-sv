@@ -111,14 +111,18 @@ const jsonLd = {
     <!-- Script de Animaciones de Entrada (IntersectionObserver) -->
     <script>
       function setupScrollReveals() {
+        const isMobile = window.matchMedia('(max-width: 767px)').matches;
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const revealElements = document.querySelectorAll('.reveal-on-scroll');
 
-        if (prefersReducedMotion) {
+        // En pantallas móviles (< 768px) o con reducción de movimiento:
+        // Desactivar animaciones de scroll y evitar registrar en IntersectionObserver
+        if (isMobile || prefersReducedMotion) {
           revealElements.forEach((el) => el.classList.add('is-revealed'));
           return;
         }
 
+        // Desktop/Tablet: One-Shot IntersectionObserver
         const observer = new IntersectionObserver(
           (entries, obs) => {
             entries.forEach((entry) => {
@@ -129,8 +133,8 @@ const jsonLd = {
             });
           },
           {
-            threshold: 0.12,
-            rootMargin: '0px 0px -40px 0px',
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px',
           }
         );
 

@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import HowToHelp from '../components/HowToHelp.astro';
+import AdoptionDogs from '../components/AdoptionDogs.astro';
 import BankDonations from '../components/BankDonations.astro';
 import SupplyDonations from '../components/SupplyDonations.astro';
 import CollectionCenters from '../components/CollectionCenters.astro';
@@ -20,7 +21,7 @@ import Footer from '../components/Footer.astro';
   <Navbar />
 
   <!-- Contenido Principal -->
-  <main class="w-full pt-20 overflow-x-hidden">
+  <main class="w-full pt-20">
     <div class="flex flex-col w-full">
       <!-- 1. Hero (#inicio) -->
       <Hero />
@@ -31,7 +32,10 @@ import Footer from '../components/Footer.astro';
       <!-- 3. Cómo puedes ayudar (#como-ayudar) -->
       <HowToHelp />
 
-      <!-- 4. Cuentas para donaciones monetarias (#donaciones) -->
+      <!-- 4. Perritos en adopción (#adopciones) -->
+      <AdoptionDogs />
+
+      <!-- 5. Cuentas para donaciones monetarias (#donaciones) -->
       <BankDonations />
 
       <!-- 5. Donaciones en especie (#donaciones-especie) -->

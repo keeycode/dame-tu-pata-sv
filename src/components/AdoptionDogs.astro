@@ -1,0 +1,182 @@
+---
+// AdoptionDogs.astro - Perritos disponibles para adopción responsable
+import { adoptionDogs, type AdoptionDog } from '../data/adoptionDogs';
+import { siteConfig } from '../data/siteConfig';
+
+// Filtrar únicamente perritos activos y con estado disponible, ordenados según su orden definido
+const availableDogs = adoptionDogs
+  .filter((dog: AdoptionDog) => dog.active && dog.status === 'available')
+  .sort((a: AdoptionDog, b: AdoptionDog) => a.order - b.order);
+
+const whatsappNumber = siteConfig.whatsappNumber;
+
+// Generador de enlace a WhatsApp con mensaje personalizado y codificado
+function getWhatsAppAdoptionUrl(dogName: string): string {
+  const message = `Hola 🐾, estoy interesado/a en adoptar a ${dogName}.\n\n¿Podrían brindarme más información sobre él/ella y sobre el proceso de adopción?`;
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+---
+
+<section
+  id="adopciones"
+  class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24 reveal-on-scroll"
+  style="background-image: radial-gradient(circle at 10% 20%, rgba(246, 199, 183, 0.25) 0%, transparent 45%), radial-gradient(circle at 90% 80%, rgba(246, 166, 35, 0.12) 0%, transparent 40%), url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M20 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z\' fill=\'%23C8BBAA\' fill-opacity=\'0.14\'/%3E%3C/svg%3E');"
+>
+  <!-- Encabezado de la Sección -->
+  <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-10 md:mb-12">
+    <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-soft-chip text-primary-dark font-bold text-xs mb-3 border border-neutral-border/30">
+      <span class="material-symbols-outlined text-[15px]">pets</span>
+      <span>Perritos en adopción</span>
+    </div>
+
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-dark tracking-tight leading-tight">
+      Ellos están esperando una familia
+    </h2>
+
+    <p class="text-base text-text-main/80 mt-3 leading-relaxed">
+      Conoce a los perritos que actualmente buscan un hogar responsable y una segunda oportunidad.
+    </p>
+
+    <!-- Indicador de aviso de ficha modelo / catálogo en preparación -->
+    <div class="mt-4 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 text-primary-dark/90 text-xs font-semibold border border-neutral-border/40 shadow-xs">
+      <span class="w-2 h-2 rounded-full bg-accent-warm animate-pulse"></span>
+      <span>Catálogo en preparación · Fichas de demostración listas para Sanity CMS</span>
+    </div>
+  </div>
+
+  <!-- Grid de Cards de Adopción (1 col móvil, 2 cols tablet, 3 cols desktop) -->
+  {
+    availableDogs.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {availableDogs.map((dog, index) => {
+          const whatsappUrl = getWhatsAppAdoptionUrl(dog.name);
+          const staggerClass = `stagger-${(index % 6) + 1}`;
+
+          return (
+            <article
+              class={`bg-card-bg rounded-3xl overflow-hidden shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-lg transition-all duration-200 h-full reveal-on-scroll ${staggerClass}`}
+            >
+              {/* Contenedor Superior: Imagen y Badges */}
+              <div class="flex flex-col">
+                <div class="relative w-full aspect-[4/3] bg-[#E5DEC9] overflow-hidden group">
+                  <img
+                    src={dog.image}
+                    alt={dog.alt}
+                    width="600"
+                    height="450"
+                    loading="lazy"
+                    decoding="async"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {/* Badge Flotante de Estado */}
+                  <div class="absolute top-3.5 right-3.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 text-primary-dark text-xs font-bold shadow-md border border-neutral-border/30 backdrop-blur-xs">
+                    <span class="w-2 h-2 rounded-full bg-accent-warm"></span>
+                    <span>Disponible</span>
+                  </div>
+
+                  {/* Chip indicador de ficha modelo */}
+                  <div class="absolute bottom-3.5 left-3.5 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-primary-dark/85 text-white text-[11px] font-medium backdrop-blur-xs">
+                    <span class="material-symbols-outlined text-[13px]">dataset</span>
+                    <span>Ficha de muestra</span>
+                  </div>
+                </div>
+
+                {/* Contenido de la Card */}
+                <div class="p-6 sm:p-7 flex-1 flex flex-col">
+                  {/* Nombre del Perrito */}
+                  <h3 class="text-xl font-extrabold text-primary-dark leading-snug mb-3">
+                    {dog.name}
+                  </h3>
+
+                  {/* Metadata Chips (Sexo, Edad, Tamaño) */}
+                  <div class="flex flex-wrap items-center gap-2 mb-4">
+                    {dog.sex && (
+                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#F2EDE3] text-primary-dark text-xs font-semibold border border-neutral-border/30">
+                        <span class="material-symbols-outlined text-[14px] text-primary-cta">
+                          {dog.sex.toLowerCase().includes('hembra') ? 'female' : 'male'}
+                        </span>
+                        <span>{dog.sex}</span>
+                      </span>
+                    )}
+
+                    {dog.age && (
+                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#F2EDE3] text-primary-dark text-xs font-semibold border border-neutral-border/30">
+                        <span class="material-symbols-outlined text-[14px] text-accent-warm">schedule</span>
+                        <span>{dog.age}</span>
+                      </span>
+                    )}
+
+                    {dog.size && (
+                      <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#F2EDE3] text-primary-dark text-xs font-semibold border border-neutral-border/30">
+                        <span class="material-symbols-outlined text-[14px] text-text-main/60">straighten</span>
+                        <span>{dog.size}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Descripción Breve */}
+                  <p class="text-sm text-text-main/75 leading-relaxed flex-1">
+                    {dog.description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Contenedor Inferior: Botón de WhatsApp */}
+              <div class="px-6 pb-6 sm:px-7 sm:pb-7 pt-2">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Quiero adoptar a ${dog.name} - Enviar mensaje por WhatsApp`}
+                  class="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-2xl bg-primary-cta text-white font-bold text-sm hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md active:translate-y-0 hover:-translate-y-0.5"
+                >
+                  <span class="material-symbols-outlined text-[18px]">chat</span>
+                  <span>Quiero adoptar</span>
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="w-full bg-white rounded-3xl p-8 sm:p-12 text-center border border-neutral-border/40 shadow-sm max-w-xl mx-auto">
+        <div class="w-14 h-14 rounded-2xl bg-soft-chip flex items-center justify-center text-primary-dark mx-auto mb-4">
+          <span class="material-symbols-outlined text-[28px]">pets</span>
+        </div>
+        <h3 class="text-xl font-bold text-primary-dark mb-2">Próximamente más historias</h3>
+        <p class="text-sm text-text-main/75 leading-relaxed mb-6">
+          Actualmente estamos actualizando el catálogo de perritos en rehabilitación. Si deseas postularte para brindar hogar temporal o conocer futuros ingresos, contáctanos.
+        </p>
+        <a
+          href="#contacto"
+          class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-primary-cta text-white font-bold text-xs sm:text-sm hover:bg-primary-dark transition-colors"
+        >
+          <span>Escríbenos por WhatsApp</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+      </div>
+    )
+  }
+
+  <!-- Banner informativo sobre el compromiso de adopción responsable -->
+  <div class="mt-10 sm:mt-12 bg-[#F2EDE3]/70 rounded-2xl p-5 sm:p-7 border border-neutral-border/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-3.5 text-left">
+      <div class="w-10 h-10 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark shrink-0">
+        <span class="material-symbols-outlined text-[22px]">verified</span>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-primary-dark leading-tight">Adopción responsable y consciente</p>
+        <p class="text-xs text-text-main/70 leading-relaxed mt-0.5">
+          Todos los perritos de Dame Tu Pata se entregan bajo un proceso que prioriza su seguridad, salud y bienestar definitivo.
+        </p>
+      </div>
+    </div>
+    <a
+      href="#contacto"
+      class="inline-flex items-center gap-1.5 text-xs font-bold text-primary-cta hover:text-primary-dark shrink-0 py-1.5 px-3 rounded-lg hover:bg-white transition-colors"
+    >
+      <span>Conocer requisitos</span>
+      <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+    </a>
+  </div>
+</section>
