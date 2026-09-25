@@ -28,7 +28,7 @@ export interface AdoptionDog {
 export const adoptionDogs: AdoptionDog[] = [
   {
     id: 'ficha-modelo-01',
-    name: 'Espacio para Adopción #1 (Ficha de muestra)',
+    name: 'Perrito en Adopción #1',
     image: '/assets/images/adopciones/perrito-adopcion-1.jpg',
     alt: 'Fotografía de muestra para cachorro mestizo en espera de un hogar responsable',
     sex: 'Macho',
@@ -41,7 +41,7 @@ export const adoptionDogs: AdoptionDog[] = [
   },
   {
     id: 'ficha-modelo-02',
-    name: 'Espacio para Adopción #2 (Ficha de muestra)',
+    name: 'Perrito en Adopción #2',
     image: '/assets/images/adopciones/perrito-adopcion-2.jpg',
     alt: 'Fotografía de muestra para perrito joven en espera de un hogar responsable',
     sex: 'Hembra',
@@ -54,7 +54,7 @@ export const adoptionDogs: AdoptionDog[] = [
   },
   {
     id: 'ficha-modelo-03',
-    name: 'Espacio para Adopción #3 (Ficha de muestra)',
+    name: 'Perrito en Adopción #3',
     image: '/assets/images/adopciones/perrito-adopcion-3.jpg',
     alt: 'Fotografía de muestra para perrito adulto en espera de un hogar responsable',
     sex: 'Macho',
