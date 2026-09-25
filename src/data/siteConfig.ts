@@ -27,7 +27,7 @@ export const siteConfig: SiteConfig = {
   domain: 'https://dametupatasv.keeycode.com',
   locale: 'es_SV',
   // Número de WhatsApp oficial para recibir las consultas del formulario (solo dígitos)
-  whatsappNumber: '50378449676',
+  whatsappNumber: '50374747002',
   contactEmail: 'contacto@dametupatasv.keeycode.com',
   socials: {
     instagram: {
