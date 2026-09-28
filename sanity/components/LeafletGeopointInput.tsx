@@ -2,8 +2,20 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { set, unset, type ObjectInputProps } from 'sanity';
 import L from 'leaflet';
 import { maplibreGL } from '@maplibre/maplibre-gl-leaflet';
+import { setWorkerUrl } from 'maplibre-gl';
+// @ts-ignore - Parámetro de consulta de Vite para generar y retornar URL del Web Worker de MapLibre
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import 'leaflet/dist/leaflet.css';
 import 'maplibre-gl/dist/maplibre-gl.css';
+
+// Configuración explícita del Web Worker requerida por MapLibre GL v6 en Vite
+try {
+  if (workerUrl) {
+    setWorkerUrl(workerUrl);
+  }
+} catch {
+  // Ignorar si el worker ya fue asignado previamente
+}
 
 export interface GeopointValue {
   _type?: 'geopoint';
@@ -104,6 +116,14 @@ export function LeafletGeopointInput(props: ObjectInputProps<GeopointValue>) {
         maxBoundsViscosity: 1,
         minZoom: 1,
       });
+
+      if (workerUrl) {
+        try {
+          setWorkerUrl(workerUrl);
+        } catch {
+          // Worker ya inicializado
+        }
+      }
 
       maplibreGL({
         style: 'https://tiles.openfreemap.org/styles/liberty',
