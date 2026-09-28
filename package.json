@@ -15,11 +15,13 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@maplibre/maplibre-gl-leaflet": "^0.1.4",
     "@sanity/client": "^8.8.0",
     "@sanity/image-url": "^2.1.1",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.3",
     "leaflet": "^1.9.4",
+    "maplibre-gl": "^6.11.2",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "sanity": "^6.16.0",

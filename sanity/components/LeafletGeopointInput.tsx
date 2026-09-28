@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { set, unset, type ObjectInputProps } from 'sanity';
 import L from 'leaflet';
+import { maplibreGL } from '@maplibre/maplibre-gl-leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 export interface GeopointValue {
   _type?: 'geopoint';
@@ -44,14 +47,23 @@ export function LeafletGeopointInput(props: ObjectInputProps<GeopointValue>) {
     setLngInput(value?.lng !== undefined ? String(value.lng) : '');
   }, [value?.lat, value?.lng]);
 
-  // Inyectar hoja de estilos de Leaflet en el documento de Sanity Studio si no existe
+  // Inyectar hojas de estilo de Leaflet y MapLibre GL en Sanity Studio si no existen
   useEffect(() => {
-    const cssId = 'sanity-leaflet-styles';
-    if (!document.getElementById(cssId)) {
+    const leafletCssId = 'sanity-leaflet-styles';
+    if (!document.getElementById(leafletCssId)) {
       const link = document.createElement('link');
-      link.id = cssId;
+      link.id = leafletCssId;
       link.rel = 'stylesheet';
       link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
+    const maplibreCssId = 'sanity-maplibre-styles';
+    if (!document.getElementById(maplibreCssId)) {
+      const link = document.createElement('link');
+      link.id = maplibreCssId;
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css';
       document.head.appendChild(link);
     }
   }, []);
@@ -88,12 +100,20 @@ export function LeafletGeopointInput(props: ObjectInputProps<GeopointValue>) {
         center: [initialLat, initialLng],
         zoom: hasInitialCoords ? 15 : DEFAULT_ZOOM,
         scrollWheelZoom: false,
+        maxBounds: [[180, -Infinity], [-180, Infinity]],
+        maxBoundsViscosity: 1,
+        minZoom: 1,
       });
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors',
-        maxZoom: 19,
+      maplibreGL({
+        style: 'https://tiles.openfreemap.org/styles/liberty',
       }).addTo(map);
+
+      if (map.attributionControl) {
+        map.attributionControl.addAttribution(
+          '<a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+        );
+      }
 
       // Si ya existen coordenadas, colocar marcador arrastrable
       if (hasInitialCoords) {
