@@ -1,5 +1,26 @@
 ---
 // Hero.astro - Sección Principal y Llamado a la Acción
+interface Props {
+  badge?: string;
+  title?: string;
+  description?: string;
+  primaryCtaText?: string;
+  secondaryCtaText?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  communityText?: string;
+}
+
+const {
+  badge = 'Rescate y Adopción Responsable en El Salvador',
+  title = 'Una pata puede cambiar una vida.',
+  description = 'Dame Tu Pata promueve el rescate y la adopción de perros en El Salvador. Juntos podemos brindar apoyo a perritos rescatados y acompañarlos en su camino hacia un hogar lleno de cariño y protección.',
+  primaryCtaText = 'Donar ahora',
+  secondaryCtaText = 'Ver centros de acopio',
+  imageUrl = '/assets/images/hero-perrito-rescatado.jpg',
+  imageAlt = 'Voluntaria en El Salvador sosteniendo con ternura la patita de un perrito mestizo rescatado',
+  communityText = 'Uniendo corazones por el bienestar y cuidado canino.',
+} = Astro.props;
 ---
 
 <section
@@ -12,15 +33,23 @@
     <div class="lg:col-span-6 flex flex-col items-start gap-5 animate-hero">
       <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm tracking-wide border border-neutral-border/30">
         <span class="material-symbols-outlined text-[16px]">pets</span>
-        <span>Rescate y Adopción Responsable en El Salvador</span>
+        <span>{badge}</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-extrabold text-primary-dark tracking-tight leading-[1.15]">
-        Una pata puede <span class="text-primary-cta underline decoration-accent-warm underline-offset-8">cambiar</span> una vida.
+        {title.includes('cambiar') ? (
+          <>
+            {title.split('cambiar')[0]}
+            <span class="text-primary-cta underline decoration-accent-warm underline-offset-8">cambiar</span>
+            {title.split('cambiar')[1]}
+          </>
+        ) : (
+          title
+        )}
       </h1>
 
       <p class="text-base sm:text-lg text-text-main/80 max-w-xl leading-relaxed">
-        Dame Tu Pata promueve el rescate y la adopción de perros en El Salvador. Juntos podemos brindar apoyo a perritos rescatados y acompañarlos en su camino hacia un hogar lleno de cariño y protección.
+        {description}
       </p>
 
       <div class="flex flex-wrap items-center gap-3 pt-2 w-full sm:w-auto">
@@ -29,14 +58,14 @@
           class="inline-flex items-center justify-center gap-2 bg-primary-cta text-white font-bold text-[15px] px-7 py-3.5 rounded-full hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_18px_rgba(240,75,69,0.3)] hover:shadow-xl w-full sm:w-auto"
         >
           <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
-          <span>Donar ahora</span>
+          <span>{primaryCtaText}</span>
         </a>
         <a
           href="#centros-acopio"
           class="inline-flex items-center justify-center gap-2 bg-card-bg text-primary-dark border border-neutral-border/60 font-bold text-[15px] px-6 py-3.5 rounded-full hover:bg-soft-chip/40 transition-all duration-200 w-full sm:w-auto shadow-sm"
         >
           <span class="material-symbols-outlined text-[20px] text-accent-warm">location_on</span>
-          <span>Ver centros de acopio</span>
+          <span>{secondaryCtaText}</span>
         </a>
       </div>
 
@@ -50,7 +79,7 @@
           </div>
         </div>
         <p class="text-xs sm:text-sm text-text-main/70 font-medium">
-          Uniendo corazones por el bienestar y cuidado canino.
+          {communityText}
         </p>
       </div>
     </div>
@@ -59,8 +88,8 @@
     <div class="lg:col-span-6 relative animate-hero-delayed">
       <div class="relative rounded-3xl overflow-hidden shadow-xl bg-card-bg border border-neutral-border/40 aspect-[4/3] md:aspect-[5/4] w-full">
         <img
-          src="/assets/images/hero-perrito-rescatado.jpg"
-          alt="Voluntaria en El Salvador sosteniendo con ternura la patita de un perrito mestizo rescatado"
+          src={imageUrl}
+          alt={imageAlt}
           width="800"
           height="640"
           loading="eager"

@@ -11,47 +11,106 @@ import CollectionCenters from '../components/CollectionCenters.astro';
 import EmotionalBanner from '../components/EmotionalBanner.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
+
+import {
+  getSiteSettings,
+  getLandingPageData,
+  getAdoptionDogs,
+  getDonationAccounts,
+  getSuppliesData,
+  getCollectionCenters,
+} from '../sanity/queries';
+
+const siteSettings = await getSiteSettings();
+const landingData = await getLandingPageData();
+const adoptionDogs = await getAdoptionDogs();
+const donationAccounts = await getDonationAccounts();
+const suppliesData = await getSuppliesData();
+const collectionCenters = await getCollectionCenters();
 ---
 
 <Layout
-  title="Dame Tu Pata — Rescate y Adopción en El Salvador"
-  description="Dame Tu Pata promueve el rescate, rehabilitación y adopción responsable de perros en situación de vulnerabilidad en El Salvador. Juntos podemos brindar apoyo y acompañarlos hacia un hogar lleno de cariño."
+  seo={landingData.seo}
+  siteSettings={siteSettings}
 >
   <!-- Barra de Navegación Sticky -->
-  <Navbar />
+  <Navbar
+    logoUrl={siteSettings.logoUrl}
+    organizationName={siteSettings.organizationName}
+  />
 
   <!-- Contenido Principal -->
   <main class="w-full pt-20">
     <div class="flex flex-col w-full">
       <!-- 1. Hero (#inicio) -->
-      <Hero />
+      <Hero
+        badge={landingData.heroBadge}
+        title={landingData.heroTitle}
+        description={landingData.heroDescription}
+        primaryCtaText={landingData.heroCtaPrimaryText}
+        secondaryCtaText={landingData.heroCtaSecondaryText}
+        imageUrl={landingData.heroImageUrl}
+        imageAlt={landingData.heroImageAlt}
+        communityText={landingData.heroCommunityText}
+      />
 
       <!-- 2. Perritos en adopción (#adopciones) -->
-      <AdoptionDogs />
+      <AdoptionDogs
+        dogs={adoptionDogs}
+        whatsappNumber={siteSettings.whatsappNumber}
+      />
 
       <!-- 3. Quiénes somos (#quienes-somos) -->
-      <About />
+      <About
+        badge={landingData.aboutBadge}
+        title={landingData.aboutTitle}
+        description={landingData.aboutDescription}
+        pillars={landingData.pillars}
+      />
 
       <!-- 4. Cómo puedes ayudar (#como-ayudar) -->
-      <HowToHelp />
+      <HowToHelp
+        badge={landingData.howToHelpBadge}
+        title={landingData.howToHelpTitle}
+        description={landingData.howToHelpDescription}
+        helpActions={landingData.helpActions}
+      />
 
       <!-- 5. Cuentas para donaciones monetarias (#donaciones) -->
-      <BankDonations />
+      <BankDonations
+        accounts={donationAccounts}
+      />
 
       <!-- 6. Donaciones en especie (#donaciones-especie) -->
-      <SupplyDonations />
+      <SupplyDonations
+        categories={suppliesData.categories}
+        items={suppliesData.items}
+      />
 
       <!-- 7. Centros de acopio (#centros-acopio) -->
-      <CollectionCenters />
+      <CollectionCenters
+        centers={collectionCenters}
+      />
 
-      <!-- 7. Bloque Emocional de Conversión -->
-      <EmotionalBanner />
+      <!-- 8. Bloque Emocional de Conversión -->
+      <EmotionalBanner
+        badge={landingData.bannerBadge}
+        title={landingData.bannerTitle}
+        description={landingData.bannerDescription}
+        ctaText={landingData.bannerCtaText}
+        imageUrl={landingData.bannerImageUrl}
+        imageAlt={landingData.bannerImageAlt}
+      />
 
-      <!-- 8. Canales directos y Formulario (#contacto) -->
-      <Contact />
+      <!-- 9. Canales directos y Formulario (#contacto) -->
+      <Contact
+        settings={siteSettings}
+      />
     </div>
   </main>
 
   <!-- Pie de Página Oficial -->
-  <Footer />
+  <Footer
+    settings={siteSettings}
+  />
 </Layout>

@@ -1,5 +1,100 @@
 ---
 // BankDonations.astro - Canales Financieros y Cuentas Bancarias
+import type { SanityDonationAccount } from '../sanity/queries';
+
+interface Props {
+  accounts?: SanityDonationAccount[];
+}
+
+const {
+  accounts = [
+    {
+      id: 'banco-agricola',
+      name: 'Banco Agrícola',
+      platformType: 'bank',
+      accountType: 'Ahorros',
+      holder: 'Juliana Medina',
+      accountNumber: '313343941',
+      scope: 'local',
+      status: 'active',
+      order: 1,
+    },
+    {
+      id: 'banco-cuscatlan',
+      name: 'Banco Cuscatlán',
+      platformType: 'bank',
+      accountType: 'Ahorros',
+      holder: 'Juliana Medina',
+      accountNumber: '4014 9500 1489 432',
+      scope: 'local',
+      status: 'active',
+      order: 2,
+    },
+    {
+      id: 'banco-bac',
+      name: 'Banco América Central',
+      platformType: 'bank',
+      accountType: 'Ahorros',
+      holder: 'Juliana Medina',
+      accountNumber: '1124 2031 0',
+      scope: 'local',
+      status: 'active',
+      order: 3,
+    },
+    {
+      id: 'banco-davivienda',
+      name: 'Banco Davivienda',
+      platformType: 'bank',
+      accountType: 'Ahorros',
+      holder: 'Juliana Medina',
+      accountNumber: '7775 4314 3702',
+      scope: 'local',
+      status: 'active',
+      order: 4,
+    },
+    {
+      id: 'banco-promerica',
+      name: 'Banco Promerica',
+      platformType: 'bank',
+      accountType: 'Ahorros',
+      holder: 'Juliana Medina',
+      accountNumber: '200 0029 0387 28',
+      scope: 'local',
+      status: 'active',
+      order: 5,
+    },
+    {
+      id: 'chivo-wallet',
+      name: 'Chivo Wallet',
+      platformType: 'wallet',
+      accountType: 'Billetera',
+      holder: 'Herbert Armas',
+      identifier: '04885311-2',
+      scope: 'local',
+      status: 'active',
+      order: 6,
+    },
+    {
+      id: 'paypal',
+      name: 'PayPal',
+      platformType: 'paypal',
+      accountType: 'Internacional',
+      holder: 'Juliana Medina',
+      identifier: 'juliemedbell',
+      scope: 'international',
+      status: 'pending',
+      order: 7,
+    },
+  ],
+} = Astro.props;
+
+const localAccounts = accounts
+  .filter((acc) => acc.scope === 'local')
+  .sort((a, b) => a.order - b.order);
+
+const intlAccounts = accounts
+  .filter((acc) => acc.scope === 'international')
+  .sort((a, b) => a.order - b.order);
 ---
 
 <section id="donaciones" class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-24 reveal-on-scroll">
@@ -49,208 +144,93 @@
 
       <!-- Tab 1: Cuentas Locales El Salvador -->
       <div id="tab-sv-content" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- 1. Banco Agrícola -->
-        <div class="bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-1">
-          <div class="w-full h-1.5 bg-primary-cta absolute top-0 left-0"></div>
-          <div class="flex-1">
-            <div class="flex items-start justify-between gap-2 mb-4 pt-1">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary-cta text-[24px]">account_balance</span>
-                <h3 class="text-base sm:text-lg font-bold text-primary-dark">Banco Agrícola</h3>
-              </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-soft-chip text-primary-dark text-[11px] font-bold">Ahorros</span>
-            </div>
-            <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
-              <p>Titular: <span class="font-bold text-text-main">Juliana Medina</span></p>
-              <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
-                <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">313343941</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-auto pt-2">
-            <button
-              type="button"
-              class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
-              data-copy="313343941"
-            >
-              <span class="material-symbols-outlined text-[18px]">content_copy</span>
-              <span>Copiar número</span>
-            </button>
-          </div>
-        </div>
+        {localAccounts.map((account, index) => {
+          const isWallet = account.platformType === 'wallet';
+          const topBarClass = isWallet ? 'bg-accent-warm' : 'bg-primary-cta';
+          const iconName = isWallet ? 'account_balance_wallet' : 'account_balance';
+          const tagBg = isWallet ? 'bg-accent-warm/20' : 'bg-soft-chip';
+          const copyValue = account.accountNumber || account.identifier || '';
+          const copyBtnLabel = isWallet ? 'Copiar identificador' : 'Copiar número';
 
-        <!-- 2. Banco Cuscatlán -->
-        <div class="bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-2">
-          <div class="w-full h-1.5 bg-primary-cta absolute top-0 left-0"></div>
-          <div class="flex-1">
-            <div class="flex items-start justify-between gap-2 mb-4 pt-1">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary-cta text-[24px]">account_balance</span>
-                <h3 class="text-base sm:text-lg font-bold text-primary-dark">Banco Cuscatlán</h3>
+          return (
+            <div class={`bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-${(index % 6) + 1}`}>
+              <div class={`w-full h-1.5 ${topBarClass} absolute top-0 left-0`}></div>
+              <div class="flex-1">
+                <div class="flex items-start justify-between gap-2 mb-4 pt-1">
+                  <div class="flex items-center gap-2.5">
+                    <span class="material-symbols-outlined text-primary-cta text-[24px]">{iconName}</span>
+                    <h3 class="text-base sm:text-lg font-bold text-primary-dark">{account.name}</h3>
+                  </div>
+                  <span class={`px-2.5 py-0.5 rounded-full ${tagBg} text-primary-dark text-[11px] font-bold`}>
+                    {account.accountType || (isWallet ? 'Billetera' : 'Ahorros')}
+                  </span>
+                </div>
+                <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
+                  <p>Titular: <span class="font-bold text-text-main">{account.holder}</span></p>
+                  <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
+                    <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">
+                      {copyValue}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-soft-chip text-primary-dark text-[11px] font-bold">Ahorros</span>
-            </div>
-            <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
-              <p>Titular: <span class="font-bold text-text-main">Juliana Medina</span></p>
-              <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
-                <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">4014 9500 1489 432</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-auto pt-2">
-            <button
-              type="button"
-              class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
-              data-copy="4014 9500 1489 432"
-            >
-              <span class="material-symbols-outlined text-[18px]">content_copy</span>
-              <span>Copiar número</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 3. Banco América Central (BAC) -->
-        <div class="bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-3">
-          <div class="w-full h-1.5 bg-primary-cta absolute top-0 left-0"></div>
-          <div class="flex-1">
-            <div class="flex items-start justify-between gap-2 mb-4 pt-1">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary-cta text-[24px]">account_balance</span>
-                <h3 class="text-base sm:text-lg font-bold text-primary-dark">Banco América Central</h3>
-              </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-soft-chip text-primary-dark text-[11px] font-bold">Ahorros</span>
-            </div>
-            <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
-              <p>Titular: <span class="font-bold text-text-main">Juliana Medina</span></p>
-              <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
-                <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">1124 2031 0</span>
+              <div class="mt-auto pt-2">
+                <button
+                  type="button"
+                  class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
+                  data-copy={copyValue}
+                >
+                  <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                  <span>{copyBtnLabel}</span>
+                </button>
               </div>
             </div>
-          </div>
-          <div class="mt-auto pt-2">
-            <button
-              type="button"
-              class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
-              data-copy="1124 2031 0"
-            >
-              <span class="material-symbols-outlined text-[18px]">content_copy</span>
-              <span>Copiar número</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 4. Banco Davivienda -->
-        <div class="bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-4">
-          <div class="w-full h-1.5 bg-primary-cta absolute top-0 left-0"></div>
-          <div class="flex-1">
-            <div class="flex items-start justify-between gap-2 mb-4 pt-1">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary-cta text-[24px]">account_balance</span>
-                <h3 class="text-base sm:text-lg font-bold text-primary-dark">Banco Davivienda</h3>
-              </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-soft-chip text-primary-dark text-[11px] font-bold">Ahorros</span>
-            </div>
-            <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
-              <p>Titular: <span class="font-bold text-text-main">Juliana Medina</span></p>
-              <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
-                <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">7775 4314 3702</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-auto pt-2">
-            <button
-              type="button"
-              class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
-              data-copy="7775 4314 3702"
-            >
-              <span class="material-symbols-outlined text-[18px]">content_copy</span>
-              <span>Copiar número</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 5. Banco Promerica -->
-        <div class="bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-5">
-          <div class="w-full h-1.5 bg-primary-cta absolute top-0 left-0"></div>
-          <div class="flex-1">
-            <div class="flex items-start justify-between gap-2 mb-4 pt-1">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary-cta text-[24px]">account_balance</span>
-                <h3 class="text-base sm:text-lg font-bold text-primary-dark">Banco Promerica</h3>
-              </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-soft-chip text-primary-dark text-[11px] font-bold">Ahorros</span>
-            </div>
-            <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
-              <p>Titular: <span class="font-bold text-text-main">Juliana Medina</span></p>
-              <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
-                <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">200 0029 0387 28</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-auto pt-2">
-            <button
-              type="button"
-              class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
-              data-copy="200 0029 0387 28"
-            >
-              <span class="material-symbols-outlined text-[18px]">content_copy</span>
-              <span>Copiar número</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 6. Chivo Wallet -->
-        <div class="bg-card-bg rounded-2xl p-6 sm:p-7 shadow-sm border border-neutral-border/40 flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden h-full reveal-on-scroll stagger-6">
-          <div class="w-full h-1.5 bg-accent-warm absolute top-0 left-0"></div>
-          <div class="flex-1">
-            <div class="flex items-start justify-between gap-2 mb-4 pt-1">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary-cta text-[24px]">account_balance_wallet</span>
-                <h3 class="text-base sm:text-lg font-bold text-primary-dark">Chivo Wallet</h3>
-              </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-accent-warm/20 text-primary-dark text-[11px] font-bold">Billetera</span>
-            </div>
-            <div class="space-y-2 mb-6 text-xs sm:text-sm text-text-main/80">
-              <p>Titular: <span class="font-bold text-text-main">Herbert Armas</span></p>
-              <div class="bg-[#F2EDE3] px-3.5 py-2.5 rounded-xl flex items-center justify-between border border-neutral-border/40">
-                <span class="font-mono font-bold text-text-main tracking-wider text-sm sm:text-base">04885311-2</span>
-              </div>
-            </div>
-          </div>
-          <div class="mt-auto pt-2">
-            <button
-              type="button"
-              class="copy-btn w-full py-2.5 px-4 rounded-xl bg-[#F2EDE3] hover:bg-soft-chip text-primary-dark font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border border-neutral-border/40 transition-colors"
-              data-copy="04885311-2"
-            >
-              <span class="material-symbols-outlined text-[18px]">content_copy</span>
-              <span>Copiar identificador</span>
-            </button>
-          </div>
-        </div>
+          );
+        })}
       </div>
 
       <!-- Tab 2: Donaciones Internacionales (PayPal) -->
       <div id="tab-int-content" class="hidden max-w-xl mx-auto">
-        <div class="bg-card-bg rounded-3xl p-7 sm:p-9 shadow-sm border border-neutral-border/30 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div class="flex items-center gap-4 text-center sm:text-left">
-            <div class="w-14 h-14 rounded-2xl bg-soft-chip flex items-center justify-center text-primary-cta shrink-0 mx-auto sm:mx-0 shadow-sm">
-              <span class="material-symbols-outlined text-[32px]">credit_card</span>
+        {intlAccounts.map((account) => {
+          const userIdentifier = account.identifier || account.accountNumber || '';
+          const hasActiveUrl = account.externalUrl && account.status === 'active';
+
+          return (
+            <div class="bg-card-bg rounded-3xl p-7 sm:p-9 shadow-sm border border-neutral-border/30 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div class="flex items-center gap-4 text-center sm:text-left">
+                <div class="w-14 h-14 rounded-2xl bg-soft-chip flex items-center justify-center text-primary-cta shrink-0 mx-auto sm:mx-0 shadow-sm">
+                  <span class="material-symbols-outlined text-[32px]">credit_card</span>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold text-primary-dark">{account.name}</h3>
+                  <p class="text-sm text-text-main/80 mt-1.5">
+                    Usuario: <span class="font-mono font-bold text-text-main">{userIdentifier}</span>
+                  </p>
+                </div>
+              </div>
+              {hasActiveUrl ? (
+                <a
+                  href={account.externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center gap-2 bg-primary-cta text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full hover:bg-primary-dark transition-all duration-200 shadow-sm shrink-0 w-full sm:w-auto"
+                >
+                  <span>Donar con PayPal</span>
+                  <span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  class="inline-flex items-center justify-center gap-2 bg-neutral-border/60 text-text-main/80 font-bold text-xs sm:text-sm px-6 py-3 rounded-full cursor-not-allowed opacity-75 shrink-0 w-full sm:w-auto"
+                >
+                  <span class="material-symbols-outlined text-[18px]">hourglass_empty</span>
+                  <span>Enlace pendiente de confirmación</span>
+                </button>
+              )}
             </div>
-            <div>
-              <h3 class="text-xl font-bold text-primary-dark">PayPal</h3>
-              <p class="text-sm text-text-main/80 mt-1.5">Usuario: <span class="font-mono font-bold text-text-main">juliemedbell</span></p>
-            </div>
-          </div>
-          <button
-            type="button"
-            disabled
-            class="inline-flex items-center justify-center gap-2 bg-neutral-border/60 text-text-main/80 font-bold text-xs sm:text-sm px-6 py-3 rounded-full cursor-not-allowed opacity-75 shrink-0 w-full sm:w-auto"
-          >
-            <span class="material-symbols-outlined text-[18px]">hourglass_empty</span>
-            <span>Enlace pendiente de confirmación</span>
-          </button>
-        </div>
+          );
+        })}
       </div>
     </div>
   </div>

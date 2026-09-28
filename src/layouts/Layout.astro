@@ -2,12 +2,15 @@
 import '../styles/global.css';
 import 'leaflet/dist/leaflet.css';
 import { siteConfig } from '../data/siteConfig';
+import type { SanityLandingPage, SanitySiteSettings } from '../sanity/queries';
 
 interface Props {
   title?: string;
   description?: string;
   canonicalUrl?: string;
   ogImage?: string;
+  seo?: SanityLandingPage['seo'];
+  siteSettings?: SanitySiteSettings;
 }
 
 const {
@@ -15,9 +18,24 @@ const {
   description = 'Dame Tu Pata promueve el rescate, rehabilitación y adopción responsable de perros en situación de vulnerabilidad en El Salvador. Juntos podemos brindarles un hogar seguro y lleno de cariño.',
   canonicalUrl = 'https://dametupatasv.keeycode.com/',
   ogImage = 'https://dametupatasv.keeycode.com/assets/images/og-image.jpg',
+  seo,
+  siteSettings,
 } = Astro.props;
 
-const siteUrl = 'https://dametupatasv.keeycode.com';
+const resolvedTitle = seo?.metaTitle || title;
+const resolvedDescription = seo?.metaDescription || description;
+const resolvedCanonical = seo?.canonicalUrl || canonicalUrl;
+const resolvedOgTitle = seo?.ogTitle || resolvedTitle;
+const resolvedOgDesc = seo?.ogDescription || resolvedDescription;
+const resolvedOgImage = seo?.ogImageUrl || ogImage;
+
+const siteUrl = siteSettings?.siteUrl || 'https://dametupatasv.keeycode.com';
+const orgName = siteSettings?.organizationName || 'Dame Tu Pata';
+const logoUrl = siteSettings?.logoUrl || `${siteUrl}/assets/images/logo-dametupata.png`;
+const faviconUrl = siteSettings?.logoUrl || '/assets/images/logo-dametupata.png';
+
+const instagramUrl = siteSettings?.socials?.instagram?.url || siteConfig.socials.instagram.url;
+const tiktokUrl = siteSettings?.socials?.tiktok?.url || siteConfig.socials.tiktok.url;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -25,11 +43,11 @@ const jsonLd = {
     {
       '@type': 'Organization',
       '@id': `${siteUrl}/#organization`,
-      name: 'Dame Tu Pata',
+      name: orgName,
       url: siteUrl,
       logo: {
         '@type': 'ImageObject',
-        url: `${siteUrl}/assets/images/logo-dametupata.png`,
+        url: logoUrl,
         width: 512,
         height: 512,
       },
@@ -39,16 +57,16 @@ const jsonLd = {
         name: 'El Salvador',
       },
       sameAs: [
-        siteConfig.socials.instagram.url,
-        siteConfig.socials.tiktok.url,
+        instagramUrl,
+        tiktokUrl,
       ].filter(Boolean),
     },
     {
       '@type': 'WebSite',
       '@id': `${siteUrl}/#website`,
       url: siteUrl,
-      name: 'Dame Tu Pata',
-      description: description,
+      name: orgName,
+      description: resolvedDescription,
       publisher: {
         '@id': `${siteUrl}/#organization`,
       },
@@ -63,31 +81,31 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={resolvedDescription} />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href={canonicalUrl} />
+    <link rel="canonical" href={resolvedCanonical} />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/assets/images/logo-dametupata.png" />
-    <link rel="apple-touch-icon" href="/assets/images/logo-dametupata.png" />
+    <link rel="icon" type="image/png" href={faviconUrl} />
+    <link rel="apple-touch-icon" href={faviconUrl} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Dame Tu Pata" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={orgName} />
+    <meta property="og:title" content={resolvedOgTitle} />
+    <meta property="og:description" content={resolvedOgDesc} />
+    <meta property="og:url" content={resolvedCanonical} />
+    <meta property="og:image" content={resolvedOgImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="es_SV" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:title" content={resolvedOgTitle} />
+    <meta name="twitter:description" content={resolvedOgDesc} />
+    <meta name="twitter:image" content={resolvedOgImage} />
 
     <!-- Google Fonts: Plus Jakarta Sans & Material Symbols -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

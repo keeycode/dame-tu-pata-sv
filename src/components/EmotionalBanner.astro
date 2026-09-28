@@ -1,13 +1,30 @@
 ---
 // EmotionalBanner.astro - Bloque Emocional de Conversión y Rescate
+interface Props {
+  badge?: string;
+  title?: string;
+  description?: string;
+  ctaText?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+}
+
+const {
+  badge = '🐾 Cada rescate transforma un destino',
+  title = 'Cada ayuda cuenta. Cada pata también.',
+  description = 'Tu colaboración permite continuar apoyando a perritos en situación de vulnerabilidad para que tengan la oportunidad de vivir en un entorno seguro y con dignidad.',
+  ctaText = 'Quiero ayudar',
+  imageUrl = '/assets/images/banner-adopcion-parque.jpg',
+  imageAlt = 'Joven sonriendo feliz junto a su perrito rescatado adoptado paseando al aire libre',
+} = Astro.props;
 ---
 
 <section class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto reveal-on-scroll">
   <div class="relative rounded-3xl overflow-hidden shadow-xl min-h-[380px] md:min-h-[440px] flex items-center border border-neutral-border/40">
-    <!-- Fotografía Oficial Local -->
+    <!-- Fotografía Oficial Local / Sanity -->
     <img
-      src="/assets/images/banner-adopcion-parque.jpg"
-      alt="Joven sonriendo feliz junto a su perrito rescatado adoptado paseando al aire libre"
+      src={imageUrl}
+      alt={imageAlt}
       width="1280"
       height="600"
       loading="lazy"
@@ -20,15 +37,15 @@
     <!-- Contenido -->
     <div class="relative z-10 p-6 sm:p-10 md:p-12 max-w-xl text-white">
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/20 text-white font-bold text-xs mb-3 backdrop-blur-sm">
-        <span>🐾 Cada rescate transforma un destino</span>
+        <span>{badge}</span>
       </div>
 
       <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight text-white">
-        Cada ayuda cuenta. Cada pata también.
+        {title}
       </h2>
 
       <p class="text-sm sm:text-base text-soft-chip mt-3 mb-6 leading-relaxed">
-        Tu colaboración permite continuar apoyando a perritos en situación de vulnerabilidad para que tengan la oportunidad de vivir en un entorno seguro y con dignidad.
+        {description}
       </p>
 
       <a
@@ -36,7 +53,7 @@
         class="inline-flex items-center justify-center gap-2 bg-primary-cta text-white font-bold text-sm sm:text-base px-8 py-3.5 rounded-full hover:bg-primary-dark border border-white/20 transition-all duration-200 shadow-lg hover:shadow-2xl"
       >
         <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
-        <span>Quiero ayudar</span>
+        <span>{ctaText}</span>
       </a>
     </div>
   </div>

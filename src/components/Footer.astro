@@ -1,6 +1,19 @@
 ---
 // Footer.astro - Pie de Página Institucional en #6E1F1C
 import { siteConfig } from '../data/siteConfig';
+import type { SanitySiteSettings } from '../sanity/queries';
+
+interface Props {
+  settings?: SanitySiteSettings;
+}
+
+const { settings } = Astro.props;
+
+const whatsappNumber = settings?.whatsappNumber || siteConfig.whatsappNumber;
+const logoUrl = settings?.logoUrl || '/assets/images/emblema-dametupata.png';
+const organizationName = settings?.organizationName || 'Dame Tu Pata';
+const instagram = settings?.socials?.instagram || siteConfig.socials.instagram;
+const tiktok = settings?.socials?.tiktok || siteConfig.socials.tiktok;
 ---
 
 <footer class="w-full bg-primary-dark text-page-bg py-12 border-t border-primary-dark/80">
@@ -10,14 +23,14 @@ import { siteConfig } from '../data/siteConfig';
       <div class="flex flex-col items-center md:items-start gap-3">
         <div class="flex items-center gap-3.5">
           <img
-            src="/assets/images/emblema-dametupata.png"
-            alt="Dame Tu Pata"
+            src={logoUrl}
+            alt={organizationName}
             width="64"
             height="64"
             class="h-14 sm:h-16 w-auto aspect-square object-contain rounded-full shadow-md"
           />
           <div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight">Dame Tu Pata</h2>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight">{organizationName}</h2>
             <p class="text-xs sm:text-sm font-medium text-soft-chip">Rescate y Adopción Responsable en El Salvador</p>
           </div>
         </div>
@@ -27,13 +40,13 @@ import { siteConfig } from '../data/siteConfig';
 
         <!-- Redes Sociales Oficiales -->
         <div class="flex items-center gap-2.5 mt-2">
-          {siteConfig.socials.instagram.url && (
+          {instagram.url && (
             <a
-              href={siteConfig.socials.instagram.url}
+              href={instagram.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Seguir en ${siteConfig.socials.instagram.label} (${siteConfig.socials.instagram.username})`}
-              title={`${siteConfig.socials.instagram.label}: ${siteConfig.socials.instagram.username}`}
+              aria-label={`Seguir en ${instagram.label} (${instagram.username})`}
+              title={`${instagram.label}: ${instagram.username}`}
               class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors shadow-xs"
             >
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
@@ -41,13 +54,13 @@ import { siteConfig } from '../data/siteConfig';
               </svg>
             </a>
           )}
-          {siteConfig.socials.tiktok.url && (
+          {tiktok.url && (
             <a
-              href={siteConfig.socials.tiktok.url}
+              href={tiktok.url}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Seguir en ${siteConfig.socials.tiktok.label} (${siteConfig.socials.tiktok.username})`}
-              title={`${siteConfig.socials.tiktok.label}: ${siteConfig.socials.tiktok.username}`}
+              aria-label={`Seguir en ${tiktok.label} (${tiktok.username})`}
+              title={`${tiktok.label}: ${tiktok.username}`}
               class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors shadow-xs"
             >
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
@@ -56,7 +69,7 @@ import { siteConfig } from '../data/siteConfig';
             </a>
           )}
           <a
-            href={`https://wa.me/${siteConfig.whatsappNumber}`}
+            href={`https://wa.me/${whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"

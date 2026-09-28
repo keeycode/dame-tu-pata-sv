@@ -3,12 +3,20 @@
 import { adoptionDogs, type AdoptionDog } from '../data/adoptionDogs';
 import { siteConfig } from '../data/siteConfig';
 
+interface Props {
+  dogs?: AdoptionDog[];
+  whatsappNumber?: string;
+}
+
+const {
+  dogs = adoptionDogs,
+  whatsappNumber = siteConfig.whatsappNumber,
+} = Astro.props;
+
 // Filtrar únicamente perritos activos y con estado disponible, ordenados según su orden definido
-const availableDogs = adoptionDogs
+const availableDogs = dogs
   .filter((dog: AdoptionDog) => dog.active && dog.status === 'available')
   .sort((a: AdoptionDog, b: AdoptionDog) => a.order - b.order);
-
-const whatsappNumber = siteConfig.whatsappNumber;
 
 // Generador de enlace a WhatsApp con mensaje personalizado incluyendo toda la información del perrito
 function getWhatsAppAdoptionUrl(dog: AdoptionDog): string {
@@ -159,7 +167,9 @@ function getWhatsAppAdoptionUrl(dog: AdoptionDog): string {
           Actualmente estamos actualizando el catálogo de perritos en rehabilitación. Si deseas postularte para brindar hogar temporal o conocer futuros ingresos, contáctanos.
         </p>
         <a
-          href="#contacto"
+          href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hola, me gustaría recibir información sobre perritos en adopción o cómo brindar hogar temporal a Dame Tu Pata.')}`}
+          target="_blank"
+          rel="noopener noreferrer"
           class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-primary-cta text-white font-bold text-xs sm:text-sm hover:bg-primary-dark transition-colors"
         >
           <span>Escríbenos por WhatsApp</span>

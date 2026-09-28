@@ -9,13 +9,20 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sanity:dev": "sanity dev",
+    "sanity:build": "sanity build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
+    "@sanity/client": "^8.8.0",
+    "@sanity/image-url": "^2.1.1",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.3",
     "leaflet": "^1.9.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sanity": "^6.16.0",
     "tailwindcss": "^4.3.3"
   },
   "allowScripts": {
@@ -24,6 +31,8 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@types/leaflet": "^1.9.22",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "typescript": "^6.0.3"
   }
 }

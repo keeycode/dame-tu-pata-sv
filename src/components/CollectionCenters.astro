@@ -1,10 +1,32 @@
 ---
 // CollectionCenters.astro - Centros de Acopio Aliados y Mapa Interactivo
-import { collectionCenters } from '../data/collectionCenters';
+import { collectionCenters as fallbackCenters } from '../data/collectionCenters';
+import type { SanityCollectionCenter } from '../sanity/queries';
 
-const activeCenters = collectionCenters
-  .filter((c) => c.activo)
-  .sort((a, b) => a.orden - b.orden);
+interface Props {
+  centers?: SanityCollectionCenter[];
+}
+
+const defaultCenters: SanityCollectionCenter[] = fallbackCenters.map((c) => ({
+  id: c.id,
+  nombre: c.nombre,
+  zona: c.zona,
+  direccion: c.direccion,
+  latitud: c.latitud,
+  longitud: c.longitud,
+  googleMapsUrl: c.googleMapsUrl,
+  wazeUrl: c.wazeUrl,
+  horario: c.horario,
+  dias: c.dias,
+  telefono: c.telefono,
+  orden: c.orden,
+  logoUrl: undefined,
+  logoAlt: undefined,
+}));
+
+const { centers = defaultCenters } = Astro.props;
+
+const activeCenters = centers.sort((a, b) => a.orden - b.orden);
 ---
 
 <section
@@ -41,15 +63,26 @@ const activeCenters = collectionCenters
           <div class="flex-1 flex flex-col">
             <div class="flex items-start gap-3.5 mb-4">
               <div
-                class="w-14 h-14 rounded-xl bg-[#F2EDE3] border border-neutral-border/40 flex flex-col items-center justify-center shrink-0 text-text-main/50 p-1 text-center group"
-                title={`Espacio para logo de ${center.nombre}`}
+                class="w-14 h-14 rounded-xl bg-[#F2EDE3] border border-neutral-border/40 flex flex-col items-center justify-center shrink-0 text-text-main/50 p-1 text-center group overflow-hidden"
+                title={center.logoAlt || `Logo de ${center.nombre}`}
               >
-                <span class="material-symbols-outlined text-[24px] text-accent-warm">
-                  {center.icon || 'storefront'}
-                </span>
-                <span class="text-[9px] font-bold text-text-main/60 uppercase tracking-tight leading-none mt-0.5">
-                  Logo
-                </span>
+                {center.logoUrl ? (
+                  <img
+                    src={center.logoUrl}
+                    alt={center.logoAlt || `Logo de ${center.nombre}`}
+                    class="w-full h-full object-contain rounded-lg"
+                    loading="lazy"
+                  />
+                ) : (
+                  <>
+                    <span class="material-symbols-outlined text-[24px] text-accent-warm">
+                      storefront
+                    </span>
+                    <span class="text-[9px] font-bold text-text-main/60 uppercase tracking-tight leading-none mt-0.5">
+                      Logo
+                    </span>
+                  </>
+                )}
               </div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
@@ -128,7 +161,7 @@ const activeCenters = collectionCenters
     }
   </div>
 
-  <!-- MAPA INTERACTIVO REAL CON LEAFLET + OPENSTREETMAP (Sustituye al placeholder) -->
+  <!-- MAPA INTERACTIVO REAL CON LEAFLET + OPENSTREETMAP -->
   <div class="w-full bg-white rounded-3xl p-4 sm:p-6 md:p-8 border border-neutral-border/40 shadow-sm reveal-on-scroll">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-neutral-border/30">
       <div class="flex items-center gap-3">
@@ -149,13 +182,14 @@ const activeCenters = collectionCenters
       </div>
       <div class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-soft-chip/60 text-primary-dark text-xs font-bold self-start sm:self-auto border border-neutral-border/30">
         <span class="w-2 h-2 rounded-full bg-[#F04B45] animate-pulse"></span>
-        <span>5 Puntos aliados activos</span>
+        <span>{activeCenters.length} Puntos aliados activos</span>
       </div>
     </div>
 
-    <!-- Contenedor del Mapa (touch-pan-y asegura desplazamiento vertical nativo en móvil) -->
+    <!-- Contenedor del Mapa con datos inyectados para el script cliente -->
     <div
       id="leaflet-map"
+      data-centers={JSON.stringify(activeCenters)}
       class="w-full h-[380px] sm:h-[440px] md:h-[500px] rounded-2xl border border-neutral-border/40 shadow-inner z-10 overflow-hidden touch-pan-y"
     >
     </div>
@@ -164,7 +198,6 @@ const activeCenters = collectionCenters
 
 <script>
   import L from 'leaflet';
-  import { collectionCenters } from '../data/collectionCenters';
 
   function initInteractiveMap() {
     const mapContainer = document.getElementById('leaflet-map');
@@ -175,12 +208,12 @@ const activeCenters = collectionCenters
       return;
     }
 
-    const activeCenters = collectionCenters
-      .filter((c) => c.activo)
-      .sort((a, b) => a.orden - b.orden);
+    const rawData = mapContainer.getAttribute('data-centers');
+    const activeCenters = rawData ? JSON.parse(rawData) : [];
 
-    // En pantallas táctiles móviles (< 768px), desactivar dragging y touchZoom para que
-    // un gesto táctil vertical continúe haciendo scroll en la página fluidamente
+    if (!activeCenters || activeCenters.length === 0) return;
+
+    // En pantallas táctiles móviles (< 768px), desactivar dragging y touchZoom para scroll vertical fluido
     const isMobile = window.innerWidth < 768;
 
     // Inicializar mapa centrado en el área metropolitana de San Salvador / Santa Tecla
@@ -199,8 +232,9 @@ const activeCenters = collectionCenters
 
     const markers: { [key: string]: L.Marker } = {};
 
-    activeCenters.forEach((center) => {
-      // Marcador personalizado con la identidad visual aprobada
+    activeCenters.forEach((center: any) => {
+      if (center.latitud === undefined || center.longitud === undefined) return;
+
       const customIcon = L.divIcon({
         className: 'custom-paw-marker',
         html: `
@@ -245,9 +279,11 @@ const activeCenters = collectionCenters
       markers[center.id] = marker;
     });
 
-    // Ajustar el zoom para encuadrar todos los marcadores
-    const group = L.featureGroup(Object.values(markers));
-    map.fitBounds(group.getBounds().pad(0.12));
+    const markerList = Object.values(markers);
+    if (markerList.length > 0) {
+      const group = L.featureGroup(markerList);
+      map.fitBounds(group.getBounds().pad(0.12));
+    }
 
     // Conectar botones "Ubicar en el mapa" de las tarjetas
     document.querySelectorAll('.focus-center-btn').forEach((btn) => {
@@ -266,7 +302,6 @@ const activeCenters = collectionCenters
     });
   }
 
-  // Ejecutar cuando el DOM esté listo
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initInteractiveMap);
   } else {

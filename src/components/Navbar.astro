@@ -1,5 +1,14 @@
 ---
 // Navbar.astro - Header Sticky y Navegación Responsive
+interface Props {
+  logoUrl?: string;
+  organizationName?: string;
+}
+
+const {
+  logoUrl = '/assets/images/logo-dametupata.png',
+  organizationName = 'Dame Tu Pata',
+} = Astro.props;
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-[#F2EDE3] md:bg-[#F2EDE3]/95 md:backdrop-blur-md border-b border-neutral-border/40 transition-all duration-200">
@@ -8,11 +17,11 @@
     <a
       href="#inicio"
       class="flex items-center shrink-0 focus:outline-none focus:ring-2 focus:ring-primary-cta rounded-full"
-      aria-label="Dame Tu Pata - Inicio"
+      aria-label={`${organizationName} - Inicio`}
     >
       <img
-        src="/assets/images/logo-dametupata.png"
-        alt="Dame Tu Pata"
+        src={logoUrl}
+        alt={organizationName}
         width="64"
         height="64"
         class="h-14 sm:h-16 w-auto aspect-square object-contain transition-transform duration-200 hover:scale-105 rounded-full"
