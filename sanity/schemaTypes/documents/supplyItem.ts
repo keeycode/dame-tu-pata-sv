@@ -2,53 +2,72 @@ import { defineType, defineField } from 'sanity';
 
 export const supplyItem = defineType({
   name: 'supplyItem',
-  title: 'Insumo o Alimento',
+  title: 'Insumo o alimento',
   type: 'document',
+  groups: [
+    { name: 'general', title: 'Información general', default: true },
+    { name: 'links', title: 'Enlaces' },
+    { name: 'publishing', title: 'Publicación' },
+  ],
   fields: [
     defineField({
       name: 'name',
-      title: 'Nombre del Insumo / Alimento',
+      title: 'Nombre',
+      description: 'Nombre del insumo o alimento (ej: Royal Canin Puppy, Pads de Entrenamiento).',
       type: 'string',
-      description: 'Ejemplo: Royal Canin Puppy, Pads de Entrenamiento, Bravecto / Credelio',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'category',
       title: 'Categoría',
+      description: 'Selecciona la categoría a la que pertenece.',
       type: 'reference',
       to: [{ type: 'supplyCategory' }],
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
-      title: 'Descripción / Uso Indicado',
+      title: 'Descripción',
+      description: 'Para qué sirve o qué animales lo necesitan.',
       type: 'text',
       rows: 3,
-      description: 'Para qué sirve o qué animales lo necesitan',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'sourceLabel',
-      title: 'Lugar Sugerido de Compra',
+      title: 'Lugar recomendado',
+      description: 'Lugar sugerido de compra (ej: Veterinarias / Tiendas, Supermercados).',
       type: 'string',
-      description: 'Ejemplo: Veterinarias / Tiendas, Comercios / Súper, Farmacias / Online',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'recommendation',
+      title: 'Recomendación',
+      description: 'Indicación o sugerencia adicional (ej: Seleccionar según peso sugerido).',
+      type: 'string',
+      group: 'general',
+    }),
+    defineField({
       name: 'purchaseUrl',
-      title: 'Enlace Directo de Compra (Opcional)',
+      title: 'Enlace de compra',
+      description: 'Pega aquí el enlace directo para compra en línea (opcional).',
       type: 'url',
-      description: 'Si se dispone de un enlace online oficial',
+      group: 'links',
     }),
     defineField({
       name: 'linkStatus',
-      title: 'Estado del Enlace en la Tarjeta',
+      title: 'Estado del enlace',
       type: 'string',
+      group: 'links',
       options: {
         list: [
-          { title: 'Enlace Próximamente', value: 'pending' },
-          { title: 'Aceptado en Acopios / Físico', value: 'in_person' },
-          { title: 'Enlace Activo de Compra', value: 'available' },
+          { title: 'Enlace próximamente', value: 'pending' },
+          { title: 'Aceptado en acopios / físico', value: 'in_person' },
+          { title: 'Enlace activo de compra', value: 'available' },
         ],
         layout: 'radio',
       },
@@ -56,22 +75,19 @@ export const supplyItem = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'recommendation',
-      title: 'Recomendación Adicional (Opcional)',
-      type: 'string',
-      description: 'Ejemplo: Seleccionar según peso sugerido, Limpias y en buen estado',
-    }),
-    defineField({
       name: 'active',
-      title: 'Activo',
+      title: 'Mostrar en la página',
+      description: 'Desactívalo para conservar el registro sin mostrarlo públicamente.',
       type: 'boolean',
-      description: 'Mostrar en la sección de donaciones en especie',
+      group: 'publishing',
       initialValue: true,
     }),
     defineField({
       name: 'order',
-      title: 'Orden de Aparición',
+      title: 'Orden de aparición',
+      description: 'Los números menores aparecerán primero.',
       type: 'number',
+      group: 'publishing',
       initialValue: 10,
       validation: (Rule) => Rule.required(),
     }),
@@ -84,18 +100,19 @@ export const supplyItem = defineType({
       active: 'active',
     },
     prepare({ title, categoryTitle, sourceLabel, active }) {
-      const activeText = active ? '' : ' [INACTIVO]';
+      const visibilityLabel = active ? '' : ' [Oculto]';
       return {
-        title: `${title}${activeText}`,
-        subtitle: `${categoryTitle || 'Sin categoría'} · ${sourceLabel || ''}`,
+        title: `${title || 'Sin nombre'}${visibilityLabel}`,
+        subtitle: `${categoryTitle || 'Sin categoría'}${sourceLabel ? ` · ${sourceLabel}` : ''}`,
       };
     },
   },
   orderings: [
     {
-      title: 'Por Orden Ascendente',
+      title: 'Por orden de aparición',
       name: 'orderAsc',
       by: [{ field: 'order', direction: 'asc' }],
     },
   ],
 });
+

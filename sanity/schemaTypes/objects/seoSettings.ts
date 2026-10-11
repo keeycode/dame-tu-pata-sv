@@ -2,50 +2,52 @@ import { defineType, defineField } from 'sanity';
 
 export const seoSettings = defineType({
   name: 'seoSettings',
-  title: 'Configuración SEO y Open Graph',
+  title: 'SEO y redes sociales',
   type: 'object',
   fields: [
     defineField({
       name: 'metaTitle',
-      title: 'Meta Title',
+      title: 'Título SEO',
       type: 'string',
-      description: 'Título optimizado para motores de búsqueda (50-60 caracteres)',
+      description: 'Título optimizado para motores de búsqueda (50 a 60 caracteres recomendados).',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'metaDescription',
-      title: 'Meta Description',
+      title: 'Meta descripción',
       type: 'text',
       rows: 3,
-      description: 'Descripción resumida para Google (120-155 caracteres)',
+      description: 'Descripción resumida para Google (120 a 155 caracteres recomendados).',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'canonicalUrl',
-      title: 'URL Canónica',
+      title: 'URL canónica',
       type: 'url',
-      description: 'URL canónica oficial de la landing (ej: https://dametupatasv.keeycode.com/)',
+      description: 'Dirección oficial de la página (ej: https://dametupatasv.keeycode.com/).',
     }),
     defineField({
       name: 'ogTitle',
-      title: 'Open Graph Title (Redes Sociales)',
+      title: 'Título para compartir',
       type: 'string',
-      description: 'Título al compartir en WhatsApp, Facebook, etc.',
+      description: 'Título visualizado al compartir en WhatsApp, Facebook y otras redes.',
     }),
     defineField({
       name: 'ogDescription',
-      title: 'Open Graph Description',
+      title: 'Descripción para compartir',
       type: 'text',
       rows: 2,
-      description: 'Descripción al compartir en redes sociales',
+      description: 'Descripción que acompaña al enlace al compartir en redes sociales.',
     }),
     defineField({
       name: 'ogImage',
-      title: 'Imagen Open Graph (1200x630 px recomendada)',
+      title: 'Imagen para compartir',
       type: 'image',
+      description: 'Imagen previa al compartir (tamaño recomendado: 1200x630 px).',
       options: {
         hotspot: true,
       },
     }),
   ],
 });
+

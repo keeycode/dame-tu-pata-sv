@@ -2,84 +2,95 @@ import { defineType, defineField } from 'sanity';
 
 export const siteSettings = defineType({
   name: 'siteSettings',
-  title: 'Configuración General',
+  title: 'Configuración general',
   type: 'document',
+  groups: [
+    { name: 'general', title: 'Información general', default: true },
+    { name: 'contact', title: 'Contacto y WhatsApp' },
+    { name: 'socials', title: 'Redes sociales' },
+  ],
   fields: [
     defineField({
       name: 'organizationName',
-      title: 'Nombre de la Organización',
+      title: 'Nombre de la organización',
       type: 'string',
-      description: 'Nombre oficial (ej: Dame Tu Pata)',
+      description: 'Nombre oficial (ej: Dame Tu Pata).',
+      group: 'general',
       validation: (Rule) => Rule.required(),
       initialValue: 'Dame Tu Pata',
     }),
     defineField({
       name: 'siteUrl',
-      title: 'URL Oficial del Sitio',
+      title: 'URL del sitio',
       type: 'url',
-      description: 'URL principal de producción (ej: https://dametupatasv.keeycode.com)',
+      description: 'Dirección web pública del sitio (ej: https://dametupatasv.keeycode.com).',
+      group: 'general',
       validation: (Rule) => Rule.required(),
       initialValue: 'https://dametupatasv.keeycode.com',
     }),
     defineField({
       name: 'logo',
-      title: 'Logo / Emblema Institucional',
+      title: 'Logo',
       type: 'image',
-      description: 'Logo circular oficial para Navbar y Footer',
+      description: 'Logo oficial para la barra de navegación y el pie de página.',
+      group: 'general',
       options: {
         hotspot: true,
       },
       fields: [
         defineField({
           name: 'alt',
-          title: 'Texto Alternativo (Alt)',
+          title: 'Texto alternativo del logo',
           type: 'string',
           initialValue: 'Dame Tu Pata',
         }),
       ],
     }),
 
-    // WhatsApp Central
+    // Contacto y WhatsApp
     defineField({
       name: 'whatsappNumber',
-      title: 'Número Técnico de WhatsApp (wa.me)',
+      title: 'Número de WhatsApp',
       type: 'string',
-      description: 'ÚNICA FUENTE DE VERDAD. Formato internacional SOLO dígitos, sin signos (+), espacios ni guiones. Ej: 50374747002',
+      description: 'Número utilizado para abrir los chats de WhatsApp (solo números, con código de país. Ej: 50374747002).',
+      group: 'contact',
       validation: (Rule) =>
         Rule.required()
           .regex(/^[0-9]+$/, { name: 'solo dígitos', invert: false })
-          .error('El número de WhatsApp solo debe contener dígitos numéricos (ej: 50374747002)'),
+          .error('Ingresa únicamente dígitos numéricos sin signos ni espacios (ej: 50374747002)'),
       initialValue: '50374747002',
     }),
     defineField({
       name: 'whatsappDisplay',
-      title: 'Número de WhatsApp Formateado (Visual)',
+      title: 'WhatsApp visible',
       type: 'string',
-      description: 'Formato legible para mostrar en pantalla. Ej: +503 7474 7002',
+      description: 'Formato legible para mostrar en pantalla (ej: +503 7474 7002).',
+      group: 'contact',
       initialValue: '+503 7474 7002',
     }),
-
-    // Medios de Contacto
     defineField({
       name: 'contactEmail',
-      title: 'Correo Electrónico de Contacto',
+      title: 'Correo',
       type: 'string',
-      description: 'Correo oficial para recibir consultas (ej: contacto@dametupatasv.keeycode.com)',
+      description: 'Correo electrónico oficial de contacto.',
+      group: 'contact',
       validation: (Rule) => Rule.required().email(),
       initialValue: 'contacto@dametupatasv.keeycode.com',
     }),
     defineField({
       name: 'phone',
-      title: 'Teléfono Fijo / Alternativo (Opcional)',
+      title: 'Teléfono secundario',
       type: 'string',
-      description: 'Número complementario si aplica',
+      description: 'Número de teléfono adicional (opcional).',
+      group: 'contact',
     }),
 
     // Redes Sociales
     defineField({
       name: 'socials',
-      title: 'Redes Sociales Oficiales',
+      title: 'Redes sociales',
       type: 'object',
+      group: 'socials',
       fields: [
         defineField({
           name: 'instagram',
@@ -107,10 +118,11 @@ export const siteSettings = defineType({
     },
     prepare({ title, subtitle, media }) {
       return {
-        title: title || 'Configuración General',
+        title: title || 'Configuración general',
         subtitle: subtitle || 'Dame Tu Pata',
         media,
       };
     },
   },
 });
+

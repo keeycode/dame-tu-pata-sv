@@ -2,44 +2,43 @@ import type { StructureResolver } from 'sanity/structure';
 
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title('Dame Tu Pata — Contenido')
+    .title('Dame Tu Pata')
     .items([
-      // 1. Configuración General (Singleton)
+      // 1. Configuración general (Singleton)
       S.listItem()
-        .title('Configuración General')
+        .title('Configuración general')
         .id('siteSettingsListItem')
         .child(
           S.document()
             .schemaType('siteSettings')
             .documentId('siteSettings')
-            .title('Configuración General')
+            .title('Configuración general')
         ),
 
-      // 2. Landing Page (Singleton)
+      // 2. Contenido de la landing (Singleton)
       S.listItem()
-        .title('Landing Page')
+        .title('Contenido de la landing')
         .id('landingPageListItem')
         .child(
           S.document()
             .schemaType('landingPage')
             .documentId('landingPage')
-            .title('Landing Page (Secciones y SEO)')
+            .title('Contenido de la landing')
         ),
 
-      S.divider(),
+      // 3. Perritos en adopción (Colección)
+      S.documentTypeListItem('adoptionDog').title('Perritos en adopción'),
 
-      // 3. Perritos en Adopción (Colección)
-      S.documentTypeListItem('adoptionDog').title('Perritos en Adopción'),
+      // 4. Cuentas de donación (Colección)
+      S.documentTypeListItem('donationAccount').title('Cuentas de donación'),
 
-      // 4. Cuentas de Donación (Colección)
-      S.documentTypeListItem('donationAccount').title('Cuentas de Donación'),
+      // 5. Insumos y alimentos (Colección)
+      S.documentTypeListItem('supplyItem').title('Insumos y alimentos'),
 
-      // 5. Insumos y Alimentos (Colección)
-      S.documentTypeListItem('supplyItem').title('Insumos y Alimentos'),
+      // 6. Categorías de insumos (Colección)
+      S.documentTypeListItem('supplyCategory').title('Categorías de insumos'),
 
-      // 6. Categorías de Insumos (Colección)
-      S.documentTypeListItem('supplyCategory').title('Categorías de Insumos'),
-
-      // 7. Centros de Acopio (Colección)
-      S.documentTypeListItem('collectionCenter').title('Centros de Acopio'),
+      // 7. Centros de acopio (Colección)
+      S.documentTypeListItem('collectionCenter').title('Centros de acopio'),
     ]);
+

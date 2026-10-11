@@ -2,31 +2,34 @@ import { defineType, defineField } from 'sanity';
 
 export const socialLink = defineType({
   name: 'socialLink',
-  title: 'Enlace de Red Social',
+  title: 'Enlace de red social',
   type: 'object',
   fields: [
     defineField({
       name: 'label',
-      title: 'Etiqueta / Nombre',
+      title: 'Red social',
+      description: 'Nombre de la red (ej: Instagram, TikTok, Facebook).',
       type: 'string',
-      description: 'Ejemplo: Instagram, TikTok, Facebook',
     }),
     defineField({
       name: 'username',
-      title: 'Nombre de usuario / Handle',
-      type: 'string',
+      title: 'Nombre de usuario',
       description: 'Ejemplo: @dametupatasv',
+      type: 'string',
     }),
     defineField({
       name: 'url',
-      title: 'URL del Perfil',
+      title: 'Enlace del perfil',
+      description: 'Enlace directo al perfil en la red social.',
       type: 'url',
     }),
     defineField({
       name: 'active',
-      title: 'Activo',
+      title: 'Mostrar en la página',
+      description: 'Desactívalo para conservar el registro sin mostrarlo públicamente.',
       type: 'boolean',
       initialValue: true,
     }),
   ],
 });
+

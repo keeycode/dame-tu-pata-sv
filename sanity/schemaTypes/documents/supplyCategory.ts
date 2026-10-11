@@ -2,20 +2,27 @@ import { defineType, defineField } from 'sanity';
 
 export const supplyCategory = defineType({
   name: 'supplyCategory',
-  title: 'Categoría de Insumos',
+  title: 'Categoría de insumos',
   type: 'document',
+  groups: [
+    { name: 'general', title: 'Información general', default: true },
+    { name: 'publishing', title: 'Publicación' },
+  ],
   fields: [
     defineField({
       name: 'title',
-      title: 'Título de la Categoría',
+      title: 'Nombre de la categoría',
+      description: 'Ejemplo: Alimentación, Higiene y descanso, Prevención, Curación.',
       type: 'string',
-      description: 'Ejemplo: Alimentación, Higiene y descanso, Prevención, Curación',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug (Identificador para filtros)',
+      title: 'Identificador URL',
+      description: 'Identificador único para filtros en la página.',
       type: 'slug',
+      group: 'general',
       options: {
         source: 'title',
         maxLength: 96,
@@ -24,14 +31,18 @@ export const supplyCategory = defineType({
     }),
     defineField({
       name: 'active',
-      title: 'Activa',
+      title: 'Mostrar en la página',
+      description: 'Desactívalo para conservar el registro sin mostrarlo públicamente.',
       type: 'boolean',
+      group: 'publishing',
       initialValue: true,
     }),
     defineField({
       name: 'order',
-      title: 'Orden de Aparición',
+      title: 'Orden de aparición',
+      description: 'Los números menores aparecerán primero.',
       type: 'number',
+      group: 'publishing',
       initialValue: 10,
       validation: (Rule) => Rule.required(),
     }),
@@ -39,23 +50,23 @@ export const supplyCategory = defineType({
   preview: {
     select: {
       title: 'title',
-      slug: 'slug.current',
       order: 'order',
       active: 'active',
     },
-    prepare({ title, slug, order, active }) {
-      const activeText = active ? '' : ' [INACTIVA]';
+    prepare({ title, order, active }) {
+      const visibilityLabel = active ? '' : ' [Oculta]';
       return {
-        title: `${order}. ${title}${activeText}`,
-        subtitle: `slug: ${slug || 'sin-slug'}`,
+        title: `${title || 'Sin categoría'}${visibilityLabel}`,
+        subtitle: `Orden: ${order ?? 10}`,
       };
     },
   },
   orderings: [
     {
-      title: 'Por Orden Ascendente',
+      title: 'Por orden de aparición',
       name: 'orderAsc',
       by: [{ field: 'order', direction: 'asc' }],
     },
   ],
 });
+

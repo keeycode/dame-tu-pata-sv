@@ -62,10 +62,6 @@ async function runSeed() {
   const bannerAssetId = await getOrUploadAsset('public/assets/images/banner-adopcion-parque.jpg');
   const ogAssetId = await getOrUploadAsset('public/assets/images/og-image.jpg');
 
-  const dog1AssetId = await getOrUploadAsset('public/assets/images/adopciones/perrito-adopcion-1.jpg');
-  const dog2AssetId = await getOrUploadAsset('public/assets/images/adopciones/perrito-adopcion-2.jpg');
-  const dog3AssetId = await getOrUploadAsset('public/assets/images/adopciones/perrito-adopcion-3.jpg');
-
   // ----------------------------------------------------
   // 2. Singleton: siteSettings
   // ----------------------------------------------------
@@ -245,77 +241,8 @@ async function runSeed() {
   // ----------------------------------------------------
   // 4. Colección: adoptionDogs
   // ----------------------------------------------------
-  console.log('\n🐶 4/6 Migrando Perritos en Adopción...');
-  const dogs = [
-    {
-      _id: 'dog-ficha-modelo-01',
-      _type: 'adoptionDog',
-      name: 'Perrito en Adopción #1',
-      slug: { _type: 'slug', current: 'perrito-adopcion-1' },
-      image: dog1AssetId
-        ? {
-            _type: 'image',
-            asset: { _type: 'reference', _ref: dog1AssetId },
-          }
-        : undefined,
-      imageAlt: 'Fotografía de muestra para cachorro mestizo en espera de un hogar responsable',
-      sex: 'Macho',
-      approximateAge: 'Cachorro (~4 meses)',
-      size: 'Mediano en desarrollo',
-      description:
-        'Ficha modelo preparada para sincronización con Sanity CMS. Al publicar casos reales de Dame Tu Pata, aquí se mostrará su historia de rescate, temperamento y estado de salud.',
-      status: 'available',
-      active: false,
-      order: 1,
-    },
-    {
-      _id: 'dog-ficha-modelo-02',
-      _type: 'adoptionDog',
-      name: 'Perrito en Adopción #2',
-      slug: { _type: 'slug', current: 'perrito-adopcion-2' },
-      image: dog2AssetId
-        ? {
-            _type: 'image',
-            asset: { _type: 'reference', _ref: dog2AssetId },
-          }
-        : undefined,
-      imageAlt: 'Fotografía de muestra para perrito joven en espera de un hogar responsable',
-      sex: 'Hembra',
-      approximateAge: 'Joven (~1 año)',
-      size: 'Mediano',
-      description:
-        'Ficha modelo preparada para sincronización con Sanity CMS. Al publicar casos reales de Dame Tu Pata, aquí se mostrará su historia de rescate, temperamento y estado de salud.',
-      status: 'available',
-      active: false,
-      order: 2,
-    },
-    {
-      _id: 'dog-ficha-modelo-03',
-      _type: 'adoptionDog',
-      name: 'Perrito en Adopción #3',
-      slug: { _type: 'slug', current: 'perrito-adopcion-3' },
-      image: dog3AssetId
-        ? {
-            _type: 'image',
-            asset: { _type: 'reference', _ref: dog3AssetId },
-          }
-        : undefined,
-      imageAlt: 'Fotografía de muestra para perrito adulto en espera de un hogar responsable',
-      sex: 'Macho',
-      approximateAge: 'Adulto (~2.5 años)',
-      size: 'Grande',
-      description:
-        'Ficha modelo preparada para sincronización con Sanity CMS. Al publicar casos reales de Dame Tu Pata, aquí se mostrará su historia de rescate, temperamento y estado de salud.',
-      status: 'available',
-      active: false,
-      order: 3,
-    },
-  ];
+  console.log('\n🐶 4/6 Colección Perritos en Adopción: Administrada exclusivamente desde Sanity Studio (sin registros modelo simulados).');
 
-  for (const dog of dogs) {
-    await client.createOrReplace(dog);
-    console.log(`  ✓ ${dog.name} creado/actualizado.`);
-  }
 
   // ----------------------------------------------------
   // 5. Cuentas de Donación

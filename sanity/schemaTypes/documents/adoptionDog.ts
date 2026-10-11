@@ -2,19 +2,28 @@ import { defineType, defineField } from 'sanity';
 
 export const adoptionDog = defineType({
   name: 'adoptionDog',
-  title: 'Perrito en Adopción',
+  title: 'Perrito en adopción',
   type: 'document',
+  groups: [
+    { name: 'general', title: 'Información general', default: true },
+    { name: 'media', title: 'Fotografía' },
+    { name: 'publishing', title: 'Publicación' },
+  ],
   fields: [
     defineField({
       name: 'name',
-      title: 'Nombre del Perrito',
+      title: 'Nombre',
+      description: 'Nombre del perrito.',
       type: 'string',
+      group: 'general',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
-      title: 'Slug / Identificador URL',
+      title: 'Identificador URL',
+      description: 'Identificador único generado a partir del nombre.',
       type: 'slug',
+      group: 'general',
       options: {
         source: 'name',
         maxLength: 96,
@@ -22,25 +31,10 @@ export const adoptionDog = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'image',
-      title: 'Fotografía Oficial',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'imageAlt',
-      title: 'Texto Alternativo (Alt)',
-      type: 'string',
-      description: 'Descripción de la fotografía para accesibilidad',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
       name: 'sex',
       title: 'Sexo',
       type: 'string',
+      group: 'general',
       options: {
         list: [
           { title: 'Macho', value: 'Macho' },
@@ -52,14 +46,16 @@ export const adoptionDog = defineType({
     }),
     defineField({
       name: 'approximateAge',
-      title: 'Edad Aproximada',
+      title: 'Edad aproximada',
+      description: 'Ejemplo: Cachorro (~4 meses), Joven (~1 año), Adulto (~2.5 años).',
       type: 'string',
-      description: 'Ejemplo: Cachorro (~4 meses), Joven (~1 año), Adulto (~2.5 años)',
+      group: 'general',
     }),
     defineField({
       name: 'size',
       title: 'Tamaño',
       type: 'string',
+      group: 'general',
       options: {
         list: [
           { title: 'Pequeño', value: 'Pequeño' },
@@ -71,20 +67,41 @@ export const adoptionDog = defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Historia y Detalles',
+      title: 'Descripción',
+      description: 'Historia de rescate, temperamento y estado de salud.',
       type: 'text',
       rows: 4,
-      description: 'Historia de rescate, temperamento y estado de salud',
+      group: 'general',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'image',
+      title: 'Fotografía',
+      description: 'Foto principal del perrito.',
+      type: 'image',
+      group: 'media',
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'imageAlt',
+      title: 'Texto alternativo de la imagen',
+      description: 'Breve descripción de la fotografía para accesibilidad.',
+      type: 'string',
+      group: 'media',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'status',
-      title: 'Estado de Adopción',
+      title: 'Estado',
       type: 'string',
+      group: 'publishing',
       options: {
         list: [
-          { title: 'Disponible (Visible en landing)', value: 'available' },
-          { title: 'En Proceso / Reservado', value: 'reserved' },
+          { title: 'Disponible', value: 'available' },
+          { title: 'Reservado', value: 'reserved' },
           { title: 'Adoptado', value: 'adopted' },
         ],
         layout: 'radio',
@@ -94,16 +111,18 @@ export const adoptionDog = defineType({
     }),
     defineField({
       name: 'active',
-      title: 'Activo',
+      title: 'Mostrar en la página',
+      description: 'Desactívalo para conservar el registro sin mostrarlo públicamente.',
       type: 'boolean',
-      description: 'Interruptor general para mostrar u ocultar en el catálogo',
+      group: 'publishing',
       initialValue: true,
     }),
     defineField({
       name: 'order',
-      title: 'Orden de Aparición',
+      title: 'Orden de aparición',
+      description: 'Los números menores aparecerán primero.',
       type: 'number',
-      description: 'Menor número aparece primero (1, 2, 3...)',
+      group: 'publishing',
       initialValue: 10,
       validation: (Rule) => Rule.required(),
     }),
@@ -118,15 +137,17 @@ export const adoptionDog = defineType({
       active: 'active',
     },
     prepare({ title, media, status, sex, age, active }) {
+      const isExample = title && /modelo|ejemplo|prueba/i.test(title);
       const statusLabel =
         status === 'available'
           ? '🟢 Disponible'
           : status === 'reserved'
             ? '🟡 Reservado'
             : '🏠 Adoptado';
-      const activeLabel = active ? '' : ' [INACTIVO]';
+      const visibilityLabel = !active ? ' [Oculto]' : '';
+      const displayTitle = isExample ? `⚠️ ${title}` : (title || 'Sin nombre');
       return {
-        title: `${title || 'Sin nombre'}${activeLabel}`,
+        title: `${displayTitle}${visibilityLabel}`,
         subtitle: `${statusLabel} · ${sex || 'Sin sexo'} · ${age || 'Sin edad'}`,
         media,
       };
@@ -134,9 +155,10 @@ export const adoptionDog = defineType({
   },
   orderings: [
     {
-      title: 'Por Orden Ascendente',
+      title: 'Por orden de aparición',
       name: 'orderAsc',
       by: [{ field: 'order', direction: 'asc' }],
     },
   ],
 });
+

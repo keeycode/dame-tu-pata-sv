@@ -2,14 +2,14 @@ import { defineType, defineField } from 'sanity';
 
 export const helpAction = defineType({
   name: 'helpAction',
-  title: 'Forma de Apoyo',
+  title: 'Forma de apoyo',
   type: 'object',
   fields: [
     defineField({
       name: 'title',
-      title: 'Título de la Acción',
+      title: 'Título de la forma de apoyo',
       type: 'string',
-      description: 'Ejemplo: Donación monetaria, Donación en especie, Centros de acopio',
+      description: 'Ejemplo: Donación monetaria, Donación en especie, Centros de acopio.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -17,25 +17,27 @@ export const helpAction = defineType({
       title: 'Descripción',
       type: 'text',
       rows: 3,
+      description: 'Breve explicación de cómo ayuda esta acción.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'icon',
-      title: 'Icono Material Symbols',
+      title: 'Icono',
       type: 'string',
-      description: 'Ejemplo: favorite, inventory_2, storefront',
+      description: 'Nombre del icono (ej: favorite, inventory_2, storefront).',
     }),
     defineField({
       name: 'ctaText',
-      title: 'Texto del Enlace / Botón',
+      title: 'Texto del botón',
       type: 'string',
-      description: 'Ejemplo: Ver cuentas de donación',
+      description: 'Ejemplo: Ver cuentas de donación, Ver lista de insumos.',
     }),
     defineField({
       name: 'ctaLink',
-      title: 'Enlace del Botón',
+      title: 'Enlace del botón',
       type: 'string',
-      description: 'Ejemplo: #donaciones, #donaciones-especie, #centros-acopio',
+      description: 'Sección a la que dirige (ej: #donaciones, #donaciones-especie, #centros-acopio).',
     }),
   ],
 });
+

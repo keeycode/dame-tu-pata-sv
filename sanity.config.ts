@@ -7,7 +7,7 @@ const singletonTypes = new Set(['siteSettings', 'landingPage']);
 
 export default defineConfig({
   name: 'default',
-  title: 'Dame Tu Pata CMS',
+  title: 'Dame Tu Pata',
 
   projectId: 'agl1kfl3',
   dataset: 'production',
