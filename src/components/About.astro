@@ -43,6 +43,51 @@ const {
     },
   ],
 } = Astro.props;
+
+// Lista segura de pilares
+const safePillars = Array.isArray(pillars) && pillars.length > 0 ? pillars : [];
+const count = safePillars.length;
+
+// Estrategia de layout adaptativo según la cantidad de tarjetas
+// Evita columnas forzadas de 4 y proporciona un ancho de lectura cómodo (~340px - 540px)
+function getLayoutConfig(total: number) {
+  if (total <= 1) {
+    return {
+      wrapperClass: 'max-w-2xl mx-auto w-full',
+      gridClass: 'grid grid-cols-1 gap-6',
+    };
+  }
+  if (total === 2) {
+    return {
+      wrapperClass: 'max-w-5xl mx-auto w-full',
+      gridClass: 'grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8',
+    };
+  }
+  if (total === 4) {
+    // Composición 2×2: máxima legibilidad y equilibrio visual para 4 pilares
+    return {
+      wrapperClass: 'w-full',
+      gridClass: 'grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8',
+    };
+  }
+  // 3, 5, 6+ cards: 1 col móvil, 2 cols tablet, hasta 3 cols en desktop
+  return {
+    wrapperClass: 'w-full',
+    gridClass: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8',
+  };
+}
+
+const { wrapperClass, gridClass } = getLayoutConfig(count);
+
+// Umbral de caracteres para contenido institucional extenso (~85-90 palabras)
+const EXTENSIVE_TEXT_THRESHOLD = 520;
+
+function getPreviewSnippet(text: string, maxLen = 380): string {
+  if (text.length <= maxLen) return text;
+  const cut = text.lastIndexOf(' ', maxLen);
+  const cleanCut = cut > 180 ? cut : maxLen;
+  return text.slice(0, cleanCut).trim() + '…';
+}
 ---
 
 <section id="quienes-somos" class="w-full py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto reveal-on-scroll">
@@ -50,10 +95,11 @@ const {
     class="bg-white rounded-3xl p-6 sm:p-10 md:p-12 border border-neutral-border/40 shadow-sm"
     style="background-image: radial-gradient(circle at 95% 10%, rgba(246, 199, 183, 0.22) 0%, transparent 35%), radial-gradient(circle at 5% 90%, rgba(246, 166, 35, 0.12) 0%, transparent 35%), url('data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 0h24v24H0z\' fill=\'none\'/%3E%3Cpath d=\'M1 1h1v1H1zm12 12h1v1h-1z\' fill=\'%23C8BBAA\' fill-opacity=\'0.08\'/%3E%3C/svg%3E'); box-shadow: 0 4px 20px -2px rgba(110, 31, 28, 0.04);"
   >
+    <!-- Encabezado de la sección -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-8 border-b border-neutral-border/30">
       <div class="max-w-xl">
         <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-soft-chip text-primary-dark font-bold text-xs mb-3 border border-neutral-border/30">
-          <span class="material-symbols-outlined text-[15px]">info</span>
+          <span class="material-symbols-outlined text-[15px]" aria-hidden="true">info</span>
           <span>{badge}</span>
         </div>
         <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary-dark tracking-tight leading-tight">
@@ -65,25 +111,155 @@ const {
       </p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {pillars.map((pillar, index) => (
-        <div class={`bg-[#F2EDE3]/70 rounded-2xl p-7 border border-neutral-border/30 flex flex-col justify-between hover:bg-[#F2EDE3] hover:shadow-md transition-all reveal-on-scroll stagger-${(index % 4) + 1}`}>
-          <div class="flex-1">
-            <div class="w-12 h-12 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark mb-5 shadow-sm">
-              <span class="material-symbols-outlined text-[26px]">{pillar.icon || 'info'}</span>
-            </div>
-            <h3 class="text-lg font-bold text-primary-dark mb-2.5">{pillar.title}</h3>
-            <p class="text-sm text-text-main/75 leading-relaxed mb-6">
-              {pillar.description}
-            </p>
-          </div>
-          <div class="pt-4 border-t border-neutral-border/30 flex items-center gap-2 text-text-main/60 text-xs font-medium mt-auto">
-            <span class="material-symbols-outlined text-[16px]">schedule</span>
-            <span>{pillar.status || 'En preparación'}</span>
-          </div>
+    <!-- Cuadrícula Dinámica de Tarjetas Institucionales -->
+    {safePillars.length === 0 ? (
+      <div class="text-center py-12 px-4 rounded-2xl bg-[#F2EDE3]/40 border border-neutral-border/30 max-w-xl mx-auto">
+        <span class="material-symbols-outlined text-4xl text-primary-dark/60 mb-2 block" aria-hidden="true">info</span>
+        <p class="text-text-main/70 text-sm">Contenido institucional en proceso de actualización.</p>
+      </div>
+    ) : (
+      <div class={wrapperClass}>
+        <div class={gridClass}>
+          {safePillars.map((pillar, index) => {
+            const pillarTitle = pillar.title || 'Pilar institucional';
+            const pillarDescription = pillar.description || '';
+            const pillarIcon = pillar.icon || 'info';
+            const pillarStatus = pillar.status?.trim() || '';
+            const isExtensive = pillarDescription.length > EXTENSIVE_TEXT_THRESHOLD;
+            const previewSnippet = isExtensive ? getPreviewSnippet(pillarDescription) : pillarDescription;
+
+            return (
+              <div
+                class={`bg-[#F2EDE3]/70 rounded-2xl p-6 sm:p-7 lg:p-8 border border-neutral-border/30 flex flex-col justify-between hover:bg-[#F2EDE3] hover:shadow-md transition-all duration-300 reveal-on-scroll stagger-${(index % 6) + 1}`}
+              >
+                <!-- Cabecera y cuerpo de la tarjeta -->
+                <div class="flex-1 flex flex-col">
+                  <!-- Icono -->
+                  <div class="w-12 h-12 rounded-xl bg-soft-chip flex items-center justify-center text-primary-dark mb-5 shadow-xs shrink-0">
+                    <span class="material-symbols-outlined text-[26px] select-none" aria-hidden="true">
+                      {pillarIcon}
+                    </span>
+                  </div>
+
+                  <!-- Título -->
+                  <h3 class="text-lg sm:text-xl font-bold text-primary-dark mb-3 tracking-tight">
+                    {pillarTitle}
+                  </h3>
+
+                  <!-- Contenido institucional (Misión, Visión, Historia, etc.) -->
+                  {isExtensive ? (
+                    <div class="pillar-content-wrapper mb-6">
+                      <!-- Snippet inicial para textos muy largos -->
+                      <div
+                        id={`pillar-preview-${index}`}
+                        class="pillar-preview-text text-sm sm:text-[15px] text-text-main/75 leading-relaxed whitespace-pre-line"
+                      >
+                        {previewSnippet}
+                      </div>
+
+                      <!-- Texto completo accesible mediante toggle -->
+                      <div
+                        id={`pillar-full-${index}`}
+                        class="pillar-full-text hidden text-sm sm:text-[15px] text-text-main/75 leading-relaxed whitespace-pre-line"
+                        aria-hidden="true"
+                      >
+                        {pillarDescription}
+                      </div>
+
+                      <!-- Botón accesible de expansión progresiva -->
+                      <button
+                        type="button"
+                        class="pillar-toggle-btn group mt-3 inline-flex items-center gap-1 text-xs font-bold text-primary-cta hover:text-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-cta rounded-md py-1 px-1.5 -ml-1.5 cursor-pointer"
+                        aria-expanded="false"
+                        aria-controls={`pillar-full-${index}`}
+                        data-target-full={`pillar-full-${index}`}
+                        data-target-preview={`pillar-preview-${index}`}
+                      >
+                        <span class="btn-text">Leer texto completo</span>
+                        <span class="material-symbols-outlined text-[16px] transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden="true">
+                          expand_more
+                        </span>
+                      </button>
+                    </div>
+                  ) : (
+                    <div class="text-sm sm:text-[15px] text-text-main/75 leading-relaxed whitespace-pre-line mb-6">
+                      {pillarDescription}
+                    </div>
+                  )}
+                </div>
+
+                <!-- Pie de tarjeta: Estado institucional (solo si está configurado) -->
+                {pillarStatus ? (
+                  <div class="pt-4 border-t border-neutral-border/30 flex items-center gap-2 text-text-main/60 text-xs font-medium mt-auto">
+                    <span class="material-symbols-outlined text-[16px] text-accent-warm" aria-hidden="true">
+                      {pillarStatus.toLowerCase().includes('prep') ? 'schedule' : 'verified'}
+                    </span>
+                    <span>{pillarStatus}</span>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
         </div>
-      ))}
-    </div>
+      </div>
+    )}
   </div>
 </section>
+
+<!-- Fallback sin JavaScript: Todo el texto institucional permanece 100% visible -->
+<noscript>
+  <style>
+    .pillar-preview-text { display: none !important; }
+    .pillar-full-text { display: block !important; }
+    .pillar-toggle-btn { display: none !important; }
+  </style>
+</noscript>
+
+<script>
+  function initPillarToggles() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.pillar-toggle-btn');
+    buttons.forEach((btn) => {
+      if (btn.dataset.initialized === 'true') return;
+      btn.dataset.initialized = 'true';
+
+      btn.addEventListener('click', () => {
+        const fullId = btn.dataset.targetFull;
+        const previewId = btn.dataset.targetPreview;
+        if (!fullId || !previewId) return;
+
+        const fullEl = document.getElementById(fullId);
+        const previewEl = document.getElementById(previewId);
+        const labelEl = btn.querySelector<HTMLElement>('.btn-text');
+        const iconEl = btn.querySelector<HTMLElement>('.material-symbols-outlined');
+
+        if (!fullEl || !previewEl) return;
+
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          fullEl.classList.add('hidden');
+          fullEl.setAttribute('aria-hidden', 'true');
+          previewEl.classList.remove('hidden');
+          previewEl.removeAttribute('aria-hidden');
+          btn.setAttribute('aria-expanded', 'false');
+          if (labelEl) labelEl.textContent = 'Leer texto completo';
+          if (iconEl) iconEl.textContent = 'expand_more';
+        } else {
+          previewEl.classList.add('hidden');
+          previewEl.setAttribute('aria-hidden', 'true');
+          fullEl.classList.remove('hidden');
+          fullEl.setAttribute('aria-hidden', 'false');
+          btn.setAttribute('aria-expanded', 'true');
+          if (labelEl) labelEl.textContent = 'Mostrar menos';
+          if (iconEl) iconEl.textContent = 'expand_less';
+        }
+      });
+    });
+  }
+
+  // Inicialización segura tanto en carga estándar como en cambios de vista Astro
+  document.addEventListener('DOMContentLoaded', initPillarToggles);
+  document.addEventListener('astro:page-load', initPillarToggles);
+  initPillarToggles();
+</script>
 
